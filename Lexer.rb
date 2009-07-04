@@ -50,7 +50,7 @@ class Lexer
 	end
 
   def Num( cl ,cc,t )
-    return TkNum.new( cl, cc, t.to_s) 
+    return TkNum.new( cl, cc, t.to_i) 
 	end
 
   # Descripción: Chequea si hay un comentario anidado, de lo contrario manda a ignorar la expresion. 
