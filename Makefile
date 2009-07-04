@@ -1,8 +1,5 @@
-yisiel.rb: RubyCalcParser documentar
-	ruby yisiel.rb ArchivosPrueba/main.txt
-
-documentar:
-	rdoc -q .
+yisiel.rb: RubyCalcParser
+	ruby yisiel.rb ArchivosPrueba/basico
 
 RubyCalcParser: 
 	racc Parser.y -o RubyCalcParser.rb
