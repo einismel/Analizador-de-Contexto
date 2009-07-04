@@ -142,17 +142,17 @@ auxmostrar:  exp               =VACIO1     { puts "mostrar -> show exp" }
           |  TkStr             
 ;
 
-exp : exp TkPlus exp       { puts "exp -> exp + exp\n" }
-    | exp TkMinus exp      { puts "exp -> exp - exp\n" }
-    | exp TkTimes exp      { puts "exp -> exp * exp\n" }
-    | exp TkDiv exp        { puts "exp -> exp / exp\n" }
-    | exp TkRes exp        { puts "exp -> exp % exp\n" }
-    | TkMinus exp        =UMINUS  { puts "exp -> - exp\n" } 
-    | TkAP exp TkCP        { puts "exp -> ( exp )\n" }
-    | TkNum                { puts "exp -> TkNum(#{val[0].value.to_s })\n" }
-    | TkId                 { puts "exp -> TkId(#{val[0].value.to_s})\n" }
-    | TkId TkAC exp TkCC   { puts "exp -> TkId(#{val[0].value.to_s})[exp]\n" }
-    | TkLength TkId        { puts "exp -> $ TkId(#{val[0].value.to_s})\n" }
+exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run('e','e')}"}
+    | exp TkMinus exp      { result = ASTResta.new(val[0], val[2]);     puts "exp -> exp - exp\n" }
+    | exp TkTimes exp      { result = ASTMult.new(val[0], val[2]);      puts "exp -> exp * exp\n" }
+    | exp TkDiv exp        { result = ASTDiv.new(val[0], val[2]);       puts "exp -> exp / exp\n" }
+    | exp TkRes exp        { result = ASTRes.new(val[0], val[2]);       puts "exp -> exp % exp\n" }
+    | TkMinus exp  =UMINUS { result = ASTResUnario.new(val[1]);         puts "exp -> - exp\n" }
+    | TkAP exp TkCP        { result = ASTUnario.new(val[1]);            puts "exp -> ( exp )\n" }
+    | TkNum                { result = ASTUnario.new(val[0]);            puts "exp -> TkNum(#{val[0].value.to_s })\n" }
+    | TkId                 { result = ASTUnario.new(val[0]);            puts "exp -> TkId(#{val[0].value.to_s})\n" }
+    | TkId TkAC exp TkCC   { result = ASTArray.new(val[0], val[2]);     puts "exp -> TkId(#{val[0].value.to_s})[exp]\n" }
+    | TkLength TkId        { result = ASTLength.new(val[1]);            puts "exp -> $ TkId(#{val[0].value.to_s})\n" }
 ;
 
 guardia : exp operador exp            { puts "guardia -> exp operador exp" }
