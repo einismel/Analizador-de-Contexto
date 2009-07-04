@@ -1,0 +1,10 @@
+proc p(in a, in b, out c) as
+begin
+c <- a + b;
+return
+end
+
+main
+show i-j
+end
+

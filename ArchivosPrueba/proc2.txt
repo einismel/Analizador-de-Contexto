@@ -1,0 +1,29 @@
+proc div(in x, in y) as
+begin
+q,r <- 0,x;
+do r>= y -> q,r <- q+1, r-y
+od;
+show "el cociente es: ";
+show q;
+show " y el resto es: ";
+show r;
+return;
+end
+
+proc sonlados(in x, in y, in z, out w) as
+begin
+if ((x+y>z) && (x+z>y) && (y+z>x)) -> w <- 1
+   ((x+y<=<) || (x+z<=y) || (y+z<=x)) -> w <- 0
+fi;
+return;
+end
+
+proc raiz(in n, out r) as
+var raiz : value
+begin
+raiz <- 0;
+do (raiz+1)*(raiz+1) <= n -> raiz <- raiz+1
+od;
+r <- raiz;
+return;
+end
