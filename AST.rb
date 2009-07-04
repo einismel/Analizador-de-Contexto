@@ -8,9 +8,7 @@
 
 class AST
   attr_accessor :num, :sign
-	def initialize(num, sign)
-		@num = num
-		@sign = sign
+	def initialize()
 	end
   def check(symtable, symtableG)
   end
@@ -24,6 +22,42 @@ class ASTBinario < AST
 		@term1 = term1
 		@term2 = term2
 	end
+end
+
+class ASTTernario < AST
+  attr_accessor :term1,:term2, :term3
+	def initialize(term1, term2, term3)
+		@term1 = term1
+		@term2 = term2
+		@term3 = term3
+	end
+end
+
+class ASTMultiple < AST
+  attr_accessor :hijos
+	def initialize()
+		@hijos = Array.new
+	end
+end
+
+class ASTD < ASTMultiple
+end
+
+class ASTDec < ASTBinario 
+  def initialize(term1, term2)
+    super(term1,term2)  
+    @term1.hijos.each do |hijo|
+      if (@term2 == 'value') 
+        @tablaGlobal.insert(hijo, SymVar.new(hijo,hijo.line, hijo.col)) 
+      else 
+        @tablaGlobal.insert(hijo, SymArray.new(hijo,hijo.line,hijo.col, hijo)) 
+      end
+        puts " EL valor es #{@term2.value}"
+    end
+  end
+end
+
+class ASTID < ASTMultiple
 end
 
 class ASTMath < ASTBinario

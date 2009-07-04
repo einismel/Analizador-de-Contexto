@@ -8,16 +8,19 @@ require 'racc/parser'
 
 
 require 'AST'
+require 'Sym'
+require 'SymTable'
 require 'Token'
 require 'excepciones'
 
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..ideecb5c4c73', 'Parser.y', 186
+module_eval <<'..end Parser.y modeval..idd2072dad63', 'Parser.y', 188
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
+@tablaGlobal = SymTable.new()
 end
 
   def parse()
@@ -42,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..ideecb5c4c73
+..end Parser.y modeval..idd2072dad63
 
 ##### racc 1.4.5 generates ###
 
@@ -446,49 +449,49 @@ Racc_debug_parser = false
 
 module_eval <<'.,.,', 'Parser.y', 26
   def _reduce_1( val, _values, result )
- puts "dec procedimiento ppal"
+ inicio = ASTTernario.new(val[0],val[1],val[2]); puts "dec procedimiento ppal"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 31
   def _reduce_2( val, _values, result )
- puts "dec -> dec var TkId(#{val[2].value.to_s}): tipo\n"
+ val[0].hijos.push(ASTDec.new(val[2],val[4]));
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 32
   def _reduce_3( val, _values, result )
- puts "dec -> lambda"
+ result = ASTD.new();
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 35
   def _reduce_4( val, _values, result )
- puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n"
+ result.hijos.push(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 36
   def _reduce_5( val, _values, result )
- puts "ID -> TkId(#{ val[0].value.to_s })\n"
+ result = ASTID.new(); puts "ID -> TkId(#{ val[0].value.to_s })\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 39
   def _reduce_6( val, _values, result )
- puts "tipo -> value\n"
+ result = "value"; puts "tipo -> value\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 40
   def _reduce_7( val, _values, result )
- puts "tipo -> Array of TkNum[#{ val[1].value.to_s }]\n"
+ result = val[1]
    result
   end
 .,.,

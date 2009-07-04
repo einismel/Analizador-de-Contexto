@@ -24,21 +24,21 @@ token UMINUS AUX VACIO VACIO1 TkPipe TkPlus TkMinus TkTimes TkDiv TkSet TkDisy T
 	/* Gramatica */
 
 rule
-inicio : dec procedimiento ppal   { puts "dec procedimiento ppal" }
+inicio : dec procedimiento ppal   { inicio = ASTTernario.new(val[0],val[1],val[2]); puts "dec procedimiento ppal" }
 ;
 
 /* Reglas de Declaraciones */
 
-dec : dec TkVar ID TkPP tipo      { puts "dec -> dec var TkId(#{val[2].value.to_s}): tipo\n" }
-    |                             { puts "dec -> lambda" }   
+dec : dec TkVar ID TkPP tipo      { val[0].hijos.push(ASTDec.new(val[2],val[4]));} 
+|                                 { result = ASTD.new(); }   
 ;
 
-ID: ID TkComa TkId                { puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
-| TkId                            { puts "ID -> TkId(#{ val[0].value.to_s })\n" }
+ID: ID TkComa TkId                { result.hijos.push(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
+| TkId                            { result = ASTID.new(); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
 ;
 
-tipo: TkValue                     { puts "tipo -> value\n" } 
-| TkArrayOf TkNum                 { puts "tipo -> Array of TkNum[#{ val[1].value.to_s }]\n" } 
+tipo: TkValue                     { result = "value"; puts "tipo -> value\n" } 
+| TkArrayOf TkNum                 { result = val[1] } 
 ;
 
 /* Reglas de Procedimientos */
@@ -179,6 +179,8 @@ end # RubyCalcParser
 
 ---- header ----
 require 'AST'
+require 'Sym'
+require 'SymTable'
 require 'Token'
 require 'excepciones'
 
@@ -186,6 +188,7 @@ require 'excepciones'
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
+@tablaGlobal = SymTable.new()
 end
 
   def parse()

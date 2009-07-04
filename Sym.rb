@@ -17,11 +17,10 @@ end
 
 class SymVar < Sym
 	attr_accessor :value
-	def initialize(str,line, col, value)
+	def initialize(str, line, col)
 		@str   = str
 		@line   = line
 		@col    = col
-		@value = value
 	end
 end
 
@@ -35,11 +34,11 @@ end
 class SymArray < Sym 
 	attr_reader :dim
 	attr_accessor :values
-	def initialize(str,line, col, dim, values)
+	def initialize(str,line, col, dim)
 		@str   = str
 		@line   = line
 		@col    = col
-		@values = values
+		@values = Array.new() 
 		@dim = dim
 	end
 end
