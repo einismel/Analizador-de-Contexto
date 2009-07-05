@@ -16,7 +16,7 @@ require 'excepciones'
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..idacbeb017bb', 'Parser.y', 188
+module_eval <<'..end Parser.y modeval..id0b816a2a4e', 'Parser.y', 188
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
@@ -45,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..idacbeb017bb
+..end Parser.y modeval..id0b816a2a4e
 
 ##### racc 1.4.5 generates ###
 
@@ -829,7 +829,7 @@ module_eval <<'.,.,', 'Parser.y', 140
 
 module_eval <<'.,.,', 'Parser.y', 144
   def _reduce_56( val, _values, result )
- result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run('e','e')}"
+ result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run(@tablaGlobal,@tablaGlobal)}"
    result
   end
 .,.,

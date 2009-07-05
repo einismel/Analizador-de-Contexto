@@ -142,7 +142,7 @@ auxmostrar:  exp               =VACIO1     { puts "mostrar -> show exp" }
           |  TkStr             
 ;
 
-exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run('e','e')}"}
+exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run(@tablaGlobal,@tablaGlobal)}"}
     | exp TkMinus exp      { result = ASTResta.new(val[0], val[2]);     puts "exp -> exp - exp\n" }
     | exp TkTimes exp      { result = ASTMult.new(val[0], val[2]);      puts "exp -> exp * exp\n" }
     | exp TkDiv exp        { result = ASTDiv.new(val[0], val[2]);       puts "exp -> exp / exp\n" }

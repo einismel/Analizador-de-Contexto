@@ -48,9 +48,9 @@ class ASTDec < ASTBinario
     super(term1,term2)  
     @term1.hijos.each do |hijo|
       if (@term2.value == 'value') 
-        tabla.insert(hijo, SymVar.new(hijo,hijo.line, hijo.col)) 
+        tabla.insert(hijo.value, SymVar.new(hijo.value,hijo.line, hijo.col)) 
       else
-        tabla.insert(hijo, SymArray.new(hijo,hijo.line,hijo.col,term2))
+        tabla.insert(hijo.value, SymArray.new(hijo.value,hijo.line,hijo.col,term2))
       end
     end
   end
@@ -104,23 +104,20 @@ class ASTRes < ASTMath
   end
 end
 
-class ASTResUnario < ASTBinario
-  def run(symtable, symtableG) 
-    term1 = @term1.run(symtable,symtableG)  
-    term2 = @term2.run(symtable,symtableG)  
-    return term1*-1 
-  end
-end
-
 class ASTUnario < AST
   attr_accessor :term1
 	def initialize(exp)
 		@term1 = exp
 	end
 
+  def run(symtable, symtableG)
+   return @term1.value 
+  end
+end 
+
+class ASTResUnario < ASTUnario
   def run(symtable, symtableG) 
-    return term1.value
+    term1 = @term1.run(symtable,symtableG)  
+    return term1*-1 
   end
 end
-
- 

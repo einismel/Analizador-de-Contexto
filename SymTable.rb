@@ -7,7 +7,7 @@
 #  Tabla de Simbolos del compilador del lenguaje yisiel.
 
 class SymTable 
-
+  attr_accessor :sim
 	def initialize()
 	  @sim = Hash.new()
 	end
