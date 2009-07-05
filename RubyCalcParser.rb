@@ -16,7 +16,7 @@ require 'excepciones'
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..idb30439bead', 'Parser.y', 217
+module_eval <<'..end Parser.y modeval..id14166395fd', 'Parser.y', 217
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
@@ -45,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..idb30439bead
+..end Parser.y modeval..id14166395fd
 
 ##### racc 1.4.5 generates ###
 
@@ -544,7 +544,7 @@ module_eval <<'.,.,', 'Parser.y', 52
 
 module_eval <<'.,.,', 'Parser.y', 58
   def _reduce_8( val, _values, result )
- val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8])); 
+ val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8],val[9])); 
                                                                         puts "procedimiento -> procedimiento proc TkId(#{val[2].value}) ( z ) as dec instsp\n"
    result
   end
@@ -559,7 +559,7 @@ module_eval <<'.,.,', 'Parser.y', 59
 
 module_eval <<'.,.,', 'Parser.y', 62
   def _reduce_10( val, _values, result )
- val[0].insertaHijo(ASTDec.new(val[2],val[4], result.TablaProc));
+ val[0].insertaHijo(ASTDec.new(val[2],val[4], val[0].tablaProc));
    result
   end
 .,.,

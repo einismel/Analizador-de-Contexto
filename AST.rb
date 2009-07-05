@@ -208,11 +208,12 @@ class ASTDecTotal < ASTMultiple
 end
 
 class ASTProc < ASTMultiple
-  def initialize(term1,term2, term3, term4, term5)
+  def initialize(term1,term2, term3, term4, term5, term6)
  
     # Crear la tabla.    
     tabla = term4.tablaProc
- 
+    arbol = term6
+
     # Insertar Valores en la tabla.
     # term3 son los parametros pasados a la tabla
     term3.hijos.each do |hijo|
@@ -223,10 +224,8 @@ class ASTProc < ASTMultiple
       end
     end    
 
-    puts tabla.find('j')
-
     # Insertar procedimiento en la Tabla de Simbolos Global.
-    simbolo = SymProc.new(term2.value, term1.line, term1.col, AST.new(), tabla)
+    simbolo = SymProc.new(term2.value, term1.line, term1.col, arbol, tabla)
     $tablaGlobal.insert(term2.value,simbolo)
   end
 end
@@ -277,11 +276,13 @@ class ASTArray < ASTBinario
 end
 
 class ASTAsig < ASTBinario
-  def initialize(term1,term2)
-    super(term1,term2)
+  def check(tabla)
     variable = $tablaGlobal.find(@term1.getId())
     puts "No esta declarada la variable..." if variable.nil?
-    variable.setValue(@term1.getPosicion(), @term2.run('e'))
-    $tablaGlobal.replace(@term1.getId(), variable)
   end
+  def run(tabla)
+    variable = $tablaGlobal.find(@term1.getId())
+    variable.setValue(@term1.getPosicion(), @term2.run('e')) 
+    $tablaGlobal.replace(@term1.getId(), variable) 
+  end 
 end 

@@ -55,12 +55,12 @@ tipo: TkValue                     { puts "tipo -> value\n" }
 
 /* Reglas de Procedimientos */
 
-procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs decp instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8])); 
+procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs decp instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8],val[9])); 
                                                                         puts "procedimiento -> procedimiento proc TkId(#{val[2].value}) ( z ) as dec instsp\n" }
               |                                                       { result = ASTMultiple.new(); puts "procedimiento -> lambda" }
 ;
 
-decp : decp TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4], result.TablaProc));} 
+decp : decp TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4], val[0].tablaProc));} 
     |                               { result = ASTDecTotal.new(); }   
 ;
 
@@ -149,7 +149,7 @@ asignacion: x TkComa asignacion TkComa exp =VACIO1            { val[0].insertaHi
 ;
 
 x : TkId                            { result = ASTId.new(val[0]); puts "x -> TkId[#{ val[0].value.to_s }] ,\n" } 
-  |  TkId TkAC exp TkCC             { result = ASTArray.new(val[0], val[2]); puts "x -> TkId[#{ val[0].value.to_s }] [exp] ,\n" } 
+  | TkId TkAC exp TkCC             { result = ASTArray.new(val[0], val[2]); puts "x -> TkId[#{ val[0].value.to_s }] [exp] ,\n" } 
 ;
 
 repeticion: TkDo y TkOd                 { result = ASTUnario.new(val[0]); puts "repeticion -> do y od \n" }

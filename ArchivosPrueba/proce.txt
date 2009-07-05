@@ -1,10 +1,14 @@
 var c, j : value
-proc p(in a, in b, out c) as
+proc procedimiento1(in a, in b, out c) as var t : array of 3
 begin
 c <- 1 + 2;
 return
 end
-
+proc procedimiento2(in a2, in b2, out c2) as var t : array of 3
+begin
+c <- 1 + 2;
+return
+end
 main
 show i-j
 end
