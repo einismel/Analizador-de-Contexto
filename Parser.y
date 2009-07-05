@@ -27,7 +27,7 @@ rule
 inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]); 
                                     puts "dec procedimiento ppal\n" ;
                                     puts "\nLa tabla de simbolos es: \n"
-                                    @tablaGlobal.sim.each do |x,y| 
+                                    $tablaGlobal.sim.each do |x,y| 
                                       puts "El valor es #{x}, el simbolo es #{y}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
@@ -41,7 +41,7 @@ inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]);
 
 /* Reglas de Declaraciones */
 
-dec : dec TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4],@tablaGlobal));} 
+dec : dec TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4],$tablaGlobal));} 
     |                             { result = ASTMultiple.new(); }   
 ;
 
@@ -55,7 +55,7 @@ tipo: TkValue                     { puts "tipo -> value\n" }
 
 /* Reglas de Procedimientos */
 
-procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs decp instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8], @tablaGlobal)); 
+procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs decp instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8])); 
                                                                         puts "procedimiento -> procedimiento proc TkId(#{val[2].value}) ( z ) as dec instsp\n" }
               |                                                       { result = ASTMultiple.new(); puts "procedimiento -> lambda" }
 ;
@@ -142,9 +142,9 @@ ifaux: guardia TkAsigD insts            { result = ASTBinario.new(val[0], val[2]
 ; 
 
 /*Las siguientes 2 instrucciones tienen una precedencia menor a las operaciones aritmeticas */
-asignacion: x TkComa asignacion TkComa exp =VACIO1            { val[0].insertaHijo(ASTAsig.new(val[2],val[4],@tablaGlobal)); puts "asignacion -> x asignacion , exp" }					 
+asignacion: x TkComa asignacion TkComa exp =VACIO1            { val[0].insertaHijo(ASTAsig.new(val[2],val[4])); puts "asignacion -> x asignacion , exp" }					 
           | x TkAsigI exp                           =VACIO1   { result= ASTMultiple.new(); 
-                                                                result.insertaHijo(ASTAsig.new(val[0],val[2],@tablaGlobal)); 
+                                                                result.insertaHijo(ASTAsig.new(val[0],val[2])); 
                                                                 puts "asignacion -> TkId(#{val[0].value.to_s }) <-  exp" } 
 ;
 
@@ -175,7 +175,7 @@ auxmostrar:  exp               =VACIO1     { puts "mostrar -> show exp" }
           |  TkStr             
 ;
 
-exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run(@tablaGlobal,@tablaGlobal)}"}
+exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run($tablaGlobal)}"}
     | exp TkMinus exp      { result = ASTResta.new(val[0], val[2]);     puts "exp -> exp - exp\n" }
     | exp TkTimes exp      { result = ASTMult.new(val[0], val[2]);      puts "exp -> exp * exp\n" }
     | exp TkDiv exp        { result = ASTDiv.new(val[0], val[2]);       puts "exp -> exp / exp\n" }
@@ -217,7 +217,7 @@ require 'excepciones'
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
-@tablaGlobal = SymTable.new()
+$tablaGlobal = SymTable.new()
 end
 
   def parse()

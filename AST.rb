@@ -10,9 +10,9 @@ class AST
   attr_accessor :num, :sign
 	def initialize()
 	end
-  def check(symtable, symtableG)
+  def check(symtable)
   end
-  def run(symtable, symtableG)
+  def run(symtable)
   end 
 end
 
@@ -70,129 +70,129 @@ class ASTID < ASTMultiple
 end
 
 class ASTMath < ASTBinario
-  def check(symtable, symtableG)
+  def check(symtable)
   end
 end
 
 class ASTSuma < ASTMath
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable,symtableG)  
-    term2 = @term2.run(symtable,symtableG)  
+  def run(symtable)
+    term1 = @term1.run(symtable)  
+    term2 = @term2.run(symtable)  
     return term1 + term2
   end
 end
 
 class ASTResta < ASTMath
-  def run(symtable, symtableG) 
-    term1 = @term1.run(symtable,symtableG)  
-    term2 = @term2.run(symtable,symtableG)  
+  def run(symtable) 
+    term1 = @term1.run(symtable)  
+    term2 = @term2.run(symtable)  
     return term1 - term2
   end
 end
 
 class ASTMult < ASTMath
-  def run(symtable, symtableG) 
-    term1 = @term1.run(symtable,symtableG)  
-    term2 = @term2.run(symtable,symtableG)  
+  def run(symtable) 
+    term1 = @term1.run(symtable)  
+    term2 = @term2.run(symtable)  
     return term1 * term2
   end
 end
 
 class ASTDiv < ASTMath
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable,symtableG)  
-    term2 = @term2.run(symtable,symtableG)  
+  def run(symtable)
+    term1 = @term1.run(symtable)  
+    term2 = @term2.run(symtable)  
     return term1 / term2 if term2 != 0
   end
 end
 
 class ASTResUnario < ASTUnario
-  def run(symtable, symtableG) 
-    term1 = @term1.run(symtable,symtableG)  
+  def run(symtable) 
+    term1 = @term1.run(symtable)  
     return term1*-1 
   end
 end
 
 class ASTRes < ASTMath
-  def run(symtable, symtableG) 
-    term1 = @term1.run(symtable,symtableG)  
-    term2 = @term2.run(symtable,symtableG)  
+  def run(symtable) 
+    term1 = @term1.run(symtable)  
+    term2 = @term2.run(symtable)  
     return term1 * term2
   end
 end
 
 class ASTBool < ASTBinario
-  def check(symtable, symtableG)
+  def check(symtable)
   end
 end
 
 class ASTConj < ASTBool
-  def run(symtable, symtableG)
-    exp1 = @exp1.run(symtable,symtableG)
-	  exp2 = @exp2.run(symtable,symtableG)
+  def run(symtable)
+    exp1 = @exp1.run(symtable)
+	  exp2 = @exp2.run(symtable)
 	  return exp1 && exp2
   end
 end
 
 class ASTDis < ASTBool
-  def run(symtable, symtableG)
-    exp1 = @exp1.run(symtable,symtableG)
-	  exp2 = @exp2.run(symtable,symtableG)
+  def run(symtable)
+    exp1 = @exp1.run(symtable)
+	  exp2 = @exp2.run(symtable)
 	  return exp1 || exp2
   end
 end
   
 class ASTNeg < ASTUnario
-  def run(symtable, symtableG)
-    exp1 = @exp1.run(symtable,symtableG)
+  def run(symtable)
+    exp1 = @exp1.run(symtable)
 	  return !exp1
   end
 end
 
 class ASTLess < ASTBool
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable, symtableG)
-	  term2 = @term2.run(symtable, symtableG)
+  def run(symtable)
+    term1 = @term1.run(symtable)
+	  term2 = @term2.run(symtable)
 	  return term1 < term2
   end
 end
   
 class ASTLeq < ASTBool
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable, symtableG)
-	  term2 = @term2.run(symtable, symtableG)
+  def run(symtable)
+    term1 = @term1.run(symtable)
+	  term2 = @term2.run(symtable)
 	  return term1 <= term2
   end
 end
 
 class ASTGreat < ASTBool
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable, symtableG)
-	  term2 = @term2.run(symtable, symtableG)
+  def run(symtable)
+    term1 = @term1.run(symtable)
+	  term2 = @term2.run(symtable)
 	  return term1 > term2
   end
 end
   
 class ASTGeq < ASTBool
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable, symtableG)
-	  term2 = @term2.run(symtable, symtableG)
+  def run(symtable)
+    term1 = @term1.run(symtable)
+	  term2 = @term2.run(symtable)
 	  return term1 >= term2
   end
 end
   
 class ASTEqual < ASTBool
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable, symtableG)
-	  term2 = @term2.run(symtable, symtableG)
+  def run(symtable)
+    term1 = @term1.run(symtable)
+	  term2 = @term2.run(symtable)
 	  return term1 == term2
   end
 end
  
 class ASTDif < ASTBool
-  def run(symtable, symtableG)
-    term1 = @term1.run(symtable, symtableG)
-	  term2 = @term2.run(symtable, symtableG)
+  def run(symtable)
+    term1 = @term1.run(symtable)
+	  term2 = @term2.run(symtable)
 	  return term1 != term2
   end
 end 
@@ -208,7 +208,7 @@ class ASTDecTotal < ASTMultiple
 end
 
 class ASTProc < ASTMultiple
-  def initialize(term1,term2, term3, term4, term5, tablaGlobal)
+  def initialize(term1,term2, term3, term4, term5)
  
     # Crear la tabla.    
     tabla = term4.tablaProc
@@ -227,7 +227,7 @@ class ASTProc < ASTMultiple
 
     # Insertar procedimiento en la Tabla de Simbolos Global.
     simbolo = SymProc.new(term2.value, term1.line, term1.col, AST.new(), tabla)
-    tablaGlobal.insert(term2.value,simbolo)
+    $tablaGlobal.insert(term2.value,simbolo)
   end
 end
 
@@ -247,7 +247,7 @@ class ASTNum < ASTUnario
   def value()
    return @term1.value 
   end
-  def run(symtable, symtableG)
+  def run(symtable)
    return @term1.value 
   end
 end 
@@ -277,11 +277,11 @@ class ASTArray < ASTBinario
 end
 
 class ASTAsig < ASTBinario
-  def initialize(term1,term2, symtableG)
+  def initialize(term1,term2)
     super(term1,term2)
-    variable = symtableG.find(@term1.getId())
+    variable = $tablaGlobal.find(@term1.getId())
     puts "No esta declarada la variable..." if variable.nil?
-    variable.setValue(@term1.getPosicion(), @term2.run('e',symtableG))
-    symtableG.replace(@term1.getId(), variable)
+    variable.setValue(@term1.getPosicion(), @term2.run('e'))
+    $tablaGlobal.replace(@term1.getId(), variable)
   end
 end 

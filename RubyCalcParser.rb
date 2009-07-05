@@ -16,11 +16,11 @@ require 'excepciones'
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..idef3f37e79f', 'Parser.y', 217
+module_eval <<'..end Parser.y modeval..idb30439bead', 'Parser.y', 217
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
-@tablaGlobal = SymTable.new()
+$tablaGlobal = SymTable.new()
 end
 
   def parse()
@@ -45,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..idef3f37e79f
+..end Parser.y modeval..idb30439bead
 
 ##### racc 1.4.5 generates ###
 
@@ -486,7 +486,7 @@ module_eval <<'.,.,', 'Parser.y', 38
  ASTTernario.new(val[0],val[1],val[2]); 
                                     puts "dec procedimiento ppal\n" ;
                                     puts "\nLa tabla de simbolos es: \n"
-                                    @tablaGlobal.sim.each do |x,y| 
+                                    $tablaGlobal.sim.each do |x,y| 
                                       puts "El valor es #{x}, el simbolo es #{y}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
@@ -502,7 +502,7 @@ module_eval <<'.,.,', 'Parser.y', 38
 
 module_eval <<'.,.,', 'Parser.y', 43
   def _reduce_2( val, _values, result )
- val[0].insertaHijo(ASTDec.new(val[2],val[4],@tablaGlobal));
+ val[0].insertaHijo(ASTDec.new(val[2],val[4],$tablaGlobal));
    result
   end
 .,.,
@@ -544,7 +544,7 @@ module_eval <<'.,.,', 'Parser.y', 52
 
 module_eval <<'.,.,', 'Parser.y', 58
   def _reduce_8( val, _values, result )
- val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8], @tablaGlobal)); 
+ val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8])); 
                                                                         puts "procedimiento -> procedimiento proc TkId(#{val[2].value}) ( z ) as dec instsp\n"
    result
   end
@@ -822,7 +822,7 @@ module_eval <<'.,.,', 'Parser.y', 140
 
 module_eval <<'.,.,', 'Parser.y', 144
   def _reduce_46( val, _values, result )
- val[0].insertaHijo(ASTAsig.new(val[2],val[4],@tablaGlobal)); puts "asignacion -> x asignacion , exp"
+ val[0].insertaHijo(ASTAsig.new(val[2],val[4])); puts "asignacion -> x asignacion , exp"
    result
   end
 .,.,
@@ -830,7 +830,7 @@ module_eval <<'.,.,', 'Parser.y', 144
 module_eval <<'.,.,', 'Parser.y', 147
   def _reduce_47( val, _values, result )
  result= ASTMultiple.new(); 
-                                                                result.insertaHijo(ASTAsig.new(val[0],val[2],@tablaGlobal)); 
+                                                                result.insertaHijo(ASTAsig.new(val[0],val[2])); 
                                                                 puts "asignacion -> TkId(#{val[0].value.to_s }) <-  exp"
    result
   end
@@ -905,7 +905,7 @@ module_eval <<'.,.,', 'Parser.y', 173
 
 module_eval <<'.,.,', 'Parser.y', 177
   def _reduce_58( val, _values, result )
- result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run(@tablaGlobal,@tablaGlobal)}"
+ result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run($tablaGlobal)}"
    result
   end
 .,.,
