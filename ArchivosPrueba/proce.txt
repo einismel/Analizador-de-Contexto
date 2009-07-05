@@ -1,6 +1,6 @@
+var c, j : value
 proc p(in a, in b, out c) as
 begin
-
 c <- 1 + 2;
 return
 end

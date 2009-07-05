@@ -30,11 +30,11 @@ inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]); puts 
 /* Reglas de Declaraciones */
 
 dec : dec TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4],@tablaGlobal));} 
-    |                             { result = ASTD.new(); }   
+    |                             { result = ASTMultiple.new(); }   
 ;
 
 ID: ID TkComa TkId                { result.insertaHijo(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
-  | TkId                          { result = ASTID.new(); result.insertaHijo(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
+  | TkId                          { result = ASTMultiple.new(); result.insertaHijo(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
 ;
 
 tipo: TkValue                     { puts "tipo -> value\n" } 
@@ -43,9 +43,13 @@ tipo: TkValue                     { puts "tipo -> value\n" }
 
 /* Reglas de Procedimientos */
 
-procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs dec instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8])); 
-                                                                        puts "procedimiento -> procedimiento proc TkId(#{val[3].value.to_s}) ( z ) as dec instsp\n" }
+procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs decp instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8], @tablaGlobal)); 
+                                                                        puts "procedimiento -> procedimiento proc TkId(#{val[2].value}) ( z ) as dec instsp\n" }
               |                                                       { result = ASTMultiple.new(); puts "procedimiento -> lambda" }
+;
+
+decp : decp TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4], result.TablaProc));} 
+    |                               { result = ASTDecTotal.new(); }   
 ;
 
 z : z TkComa modo TkId			  { val[0].insertaHijo(ASTParametros.new(val[2], val[3])); 

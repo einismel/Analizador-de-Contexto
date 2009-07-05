@@ -199,36 +199,33 @@ end
 
 # Nuevos Arboles
 
-class ASTCuaternario < AST
-  attr_accessor :term1,:term2, :term3, :term4
-	def initialize(term1, term2, term3, term4)
-		@term1 = term1
-		@term2 = term2
-		@term3 = term3
-		@term4 = term4
-	end
+class ASTDecTotal < ASTMultiple
+  attr_accessor :tablaProc
+  def initialize() 
+    @tablaProc = SymTable.new()
+		@hijos = Array.new
+  end
 end
 
 class ASTProc < ASTMultiple
   def initialize(term1,term2, term3, term4, term5, tablaGlobal)
-    super(term1, term2)
  
     # Crear la tabla.    
-    tabla = Symtable.new()
-  
+    tabla = term4.tablaProc
+ 
     # Insertar Valores en la tabla.
-    # @term2 son los parametros pasados a la tabla
-    @term2.hijos.each do |hijo|
+    # term3 son los parametros pasados a la tabla
+    term3.hijos.each do |hijo|
       if (hijo.getModo() == 'TkIn') 
-        tabla.insert(hijo.value, ParIn.new(hijo.value,hijo.line, hijo.col)) 
+        tabla.insert(hijo.getId(), ParIn.new(hijo.getId(), hijo.getToken().line, hijo.getToken().col)) 
       else
-        tabla.insert(hijo.value, ParOut.new(hijo.value,hijo.line,hijo.col))
+        tabla.insert(hijo.getId(), ParOut.new(hijo.getId(), hijo.getToken.line, hijo.getToken().col))
       end
     end    
 
     # Insertar procedimiento en la Tabla de Simbolos Global.
-    simbolo = SymProc.new(@term2.value, @term1.line, @term1.col, AST.new(), tabla)
-    tablaGlobal.insert(@term2.value,simbolo)
+    simbolo = SymProc.new(term2.value, term1.line, term1.col, AST.new(), tabla)
+    tablaGlobal.insert(term2.value,simbolo)
   end
 end
 
@@ -238,6 +235,9 @@ class ASTParametros < ASTBinario
   end
   def getId()
     return @term2.value.to_s
+  end
+  def getToken()
+    return @term1
   end
 end
 
@@ -278,6 +278,7 @@ class ASTAsig < ASTBinario
   def initialize(term1,term2, symtableG)
     super(term1,term2)
     variable = symtableG.find(@term1.getId())
+    puts "No esta declarada la variable..." if variable.nil?
     variable.setValue(@term1.getPosicion(), @term2.run('e',symtableG))
     symtableG.replace(@term1.getId(), variable)
   end
