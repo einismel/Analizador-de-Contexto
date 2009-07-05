@@ -4,7 +4,7 @@
 #* Einis Rodriguez
 #* Elias Matheus (mailto:e3matheus@gmail.com)
 #= Contenido: 
-#  Contiena la clase abstracto de arbol del compilador de yisiel
+#  Contiene la clase abstracta de arbol del compilador de yisiel
 
 class AST
   attr_accessor :num, :sign
@@ -75,6 +75,16 @@ class ASTMath < ASTBinario
 end
 
 class ASTSuma < ASTMath
+  def check(symtble, symtableG)
+    chterm1 = @term1.check(symtable,symtableG)  
+    chterm2 = @term2.check(symtable,symtableG)
+	if chterm1 && chterm2
+	  return true
+	else
+	  # aun no se manejan las excepciones
+	  return false
+	end
+  end
   def run(symtable, symtableG)
     term1 = @term1.run(symtable,symtableG)  
     term2 = @term2.run(symtable,symtableG)  
@@ -83,6 +93,15 @@ class ASTSuma < ASTMath
 end
 
 class ASTResta < ASTMath
+  def check(symtble, symtableG)
+    chterm1 = @term1.check(symtable,symtableG)  
+    chterm2 = @term2.check(symtable,symtableG)
+	if chterm1 && chterm2
+	  return true
+	else
+	  return false
+	end
+  end
   def run(symtable, symtableG) 
     term1 = @term1.run(symtable,symtableG)  
     term2 = @term2.run(symtable,symtableG)  
@@ -91,6 +110,15 @@ class ASTResta < ASTMath
 end
 
 class ASTMult < ASTMath
+  def check(symtble, symtableG)
+    chterm1 = @term1.check(symtable,symtableG)  
+    chterm2 = @term2.check(symtable,symtableG)
+	if chterm1 && chterm2
+	  return true
+	else
+	  return false
+	end
+  end
   def run(symtable, symtableG) 
     term1 = @term1.run(symtable,symtableG)  
     term2 = @term2.run(symtable,symtableG)  
@@ -99,6 +127,15 @@ class ASTMult < ASTMath
 end
 
 class ASTDiv < ASTMath
+  def check(symtble, symtableG)
+    chterm1 = @term1.check(symtable,symtableG)  
+    chterm2 = @term2.check(symtable,symtableG)
+	if chterm1 && chterm2
+	  return true
+	else
+	  return false
+	end
+  end
   def run(symtable, symtableG)
     term1 = @term1.run(symtable,symtableG)  
     term2 = @term2.run(symtable,symtableG)  
@@ -107,6 +144,14 @@ class ASTDiv < ASTMath
 end
 
 class ASTResUnario < ASTUnario
+  def check(symtble, symtableG)
+    chterm1 = @term1.check(symtable,symtableG)  
+	if chterm1
+	  return true
+	else
+	  return false
+	end
+  end
   def run(symtable, symtableG) 
     term1 = @term1.run(symtable,symtableG)  
     return term1*-1 
@@ -114,10 +159,19 @@ class ASTResUnario < ASTUnario
 end
 
 class ASTRes < ASTMath
+  def check(symtble, symtableG)
+    chterm1 = @term1.check(symtable,symtableG)  
+    chterm2 = @term2.check(symtable,symtableG)
+	if chterm1 && chterm2
+	  return true
+	else
+	  return false
+	end
+  end
   def run(symtable, symtableG) 
     term1 = @term1.run(symtable,symtableG)  
     term2 = @term2.run(symtable,symtableG)  
-    return term1 * term2
+    return term1 % term2
   end
 end
 
@@ -245,6 +299,10 @@ class ASTNum < ASTUnario
   def value()
    return @term1.value 
   end
+  # si es un numero no hay ningun problema
+  def check(symtable, symtableG)
+    return true
+  end
   def run(symtable, symtableG)
    return @term1.value 
   end
@@ -260,6 +318,16 @@ class ASTId < ASTUnario
   def getPosicion()
     return 0
   end
+  def check(symtable, symtableG)
+    # se chequea que haya sido declarada
+    elem = symtableG.find(@term1.value)
+	# se debe chequear que no se use un arreglo como una variable
+	if elem.class.to_s == "SymVar"
+	  return true
+	else 
+	  return false
+	end
+  end
 end
 
 class ASTArray < ASTBinario
@@ -271,6 +339,16 @@ class ASTArray < ASTBinario
   end
   def getPosicion()
     return @term2.value
+  end
+  def check(symtable, symtableG)
+    # se chequea que haya sido declarada
+    elem = symtableG.find(@term1.value)
+	# se debe chequear que no se use una variable como un arreglo
+	if elem.class.to_s == "SymArray"
+	  return true
+	else 
+	  return false
+	end
   end
 end
 
