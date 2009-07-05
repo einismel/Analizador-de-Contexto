@@ -1,8 +1,0 @@
-main
-var i, j : value
-var k : array of 2
-if i > j -> k[0] <- i
-   i < j -> k[1] <- j
-fi;
-show i-j;
-end
