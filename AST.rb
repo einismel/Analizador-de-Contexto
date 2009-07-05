@@ -104,6 +104,13 @@ class ASTRes < ASTMath
   end
 end
 
+class ASTResUnario < ASTUnario
+  def run(symtable, symtableG) 
+    term1 = @term1.run(symtable,symtableG)  
+    return term1*-1 
+  end
+end
+
 class ASTUnario < AST
   attr_accessor :term1
 	def initialize(exp)
@@ -115,9 +122,71 @@ class ASTUnario < AST
   end
 end 
 
-class ASTResUnario < ASTUnario
-  def run(symtable, symtableG) 
-    term1 = @term1.run(symtable,symtableG)  
-    return term1*-1 
+class ASTBool < ASTBinario
+  def check(symtable, symtableG)
   end
 end
+
+class ASTConj < ASTBool
+  def run(symtable, symtableG)
+    exp1 = @exp1.run(symtable,symtableG)
+	exp2 = @exp2.run(symtable,symtableG)
+	return exp1 && exp2
+  end
+  
+class ASTDis < ASTBool
+  def run(symtable, symtableG)
+    exp1 = @exp1.run(symtable,symtableG)
+	exp2 = @exp2.run(symtable,symtableG)
+	return exp1 || exp2
+  end
+  
+class ASTNeg < ASTBool
+  def run(symtable, symtableG)
+    exp1 = @exp1.run(symtable,symtableG)
+	exp2 = @exp2.run(symtable,symtableG)
+	return !exp1
+  end
+
+class ASTLess < ASTBool
+  def run(symtable, symtableG)
+    term1 = @term1.run(symtable, symtableG)
+	term2 = @term2.run(symtable, symtableG)
+	return term1 < term2
+  end
+  
+class ASTLeq < ASTBool
+  def run(symtable, symtableG)
+    term1 = @term1.run(symtable, symtableG)
+	term2 = @term2.run(symtable, symtableG)
+	return term1 <= term2
+  end
+  
+class ASTGreat < ASTBool
+  def run(symtable, symtableG)
+    term1 = @term1.run(symtable, symtableG)
+	term2 = @term2.run(symtable, symtableG)
+	return term1 > term2
+  end
+  
+class ASTGeq < ASTBool
+  def run(symtable, symtableG)
+    term1 = @term1.run(symtable, symtableG)
+	term2 = @term2.run(symtable, symtableG)
+	return term1 >= term2
+  end
+  
+class ASTEqual < ASTBool
+  def run(symtable, symtableG)
+    term1 = @term1.run(symtable, symtableG)
+	term2 = @term2.run(symtable, symtableG)
+	return term1 == term2
+  end
+  
+class ASTDif < ASTBool
+  def run(symtable, symtableG)
+    term1 = @term1.run(symtable, symtableG)
+	term2 = @term2.run(symtable, symtableG)
+	return term1 != term2
+  end
+  
