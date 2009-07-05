@@ -1,4 +1,6 @@
 var i,j : value
+var k,m : value
+var k : array of 2
 main
 i <- 2+4/1
 end

@@ -16,7 +16,7 @@ require 'excepciones'
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..id0b816a2a4e', 'Parser.y', 188
+module_eval <<'..end Parser.y modeval..idd0bc533495', 'Parser.y', 189
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
@@ -45,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..id0b816a2a4e
+..end Parser.y modeval..idd0bc533495
 
 ##### racc 1.4.5 generates ###
 
@@ -456,7 +456,7 @@ module_eval <<'.,.,', 'Parser.y', 26
 
 module_eval <<'.,.,', 'Parser.y', 31
   def _reduce_2( val, _values, result )
- val[0].hijos.push(ASTDec.new(val[2],val[4],@tablaGlobal));
+ val[0].insertaHijo(ASTDec.new(val[2],val[4],@tablaGlobal));
    result
   end
 .,.,
@@ -470,21 +470,21 @@ module_eval <<'.,.,', 'Parser.y', 32
 
 module_eval <<'.,.,', 'Parser.y', 35
   def _reduce_4( val, _values, result )
- result.hijos.push(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n"
+ result.insertaHijo(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 36
   def _reduce_5( val, _values, result )
- result = ASTID.new(); result.hijos.push(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n"
+ result = ASTID.new(); result.insertaHijo(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 39
   def _reduce_6( val, _values, result )
-  puts "tipo -> value\n"
+ puts "tipo -> value\n"
    result
   end
 .,.,
@@ -652,21 +652,21 @@ module_eval <<'.,.,', 'Parser.y', 83
 
 module_eval <<'.,.,', 'Parser.y', 88
   def _reduce_30( val, _values, result )
- puts "ppal -> main instrucciones end\n"
+ result = ASTUnario.new(val[1]); puts "ppal -> main instrucciones end\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 91
   def _reduce_31( val, _values, result )
- puts "ppal -> instrucciones ; insts \n"
+ val[0].insertaHijo(ASTUnario.new(val[2])); puts "ppal -> instrucciones ; insts \n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 92
   def _reduce_32( val, _values, result )
- puts "instrucciones -> insts\n"
+ result = ASTMultiple.new(); result.insertaHijo(ASTUnario.new(val[0])); puts "instrucciones -> insts\n"
    result
   end
 .,.,
@@ -687,7 +687,7 @@ module_eval <<'.,.,', 'Parser.y', 96
 
 module_eval <<'.,.,', 'Parser.y', 97
   def _reduce_35( val, _values, result )
- puts "insts -> asignacion\n"
+ result = ASTUnario.new(val[0]); puts "insts -> asignacion\n"
    result
   end
 .,.,
@@ -750,75 +750,76 @@ module_eval <<'.,.,', 'Parser.y', 111
 
 module_eval <<'.,.,', 'Parser.y', 115
   def _reduce_44( val, _values, result )
- puts "asignacion -> x asignacion , exp"
+ val[0].insertaHijo(ASTAsig.new(val[2],val[4],@tablaGlobal)); puts "asignacion -> x asignacion , exp"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 116
+module_eval <<'.,.,', 'Parser.y', 117
   def _reduce_45( val, _values, result )
- puts "asignacion -> TkId(#{val[0].value.to_s }) <-  exp"
-   result
-  end
-.,.,
-
-module_eval <<'.,.,', 'Parser.y', 119
-  def _reduce_46( val, _values, result )
- puts "x -> TkId[#{ val[0].value.to_s }] ,\n"
+ result= ASTMultiple.new(); result.insertaHijo(ASTAsig.new(val[0],val[2],@tablaGlobal));
+                                                                puts "asignacion -> TkId(#{val[0].value.to_s }) <-  exp"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 120
-  def _reduce_47( val, _values, result )
- puts "x -> TkId[#{ val[0].value.to_s }] [exp] ,\n"
+  def _reduce_46( val, _values, result )
+ result = ASTId.new(val[0]); puts "x -> TkId[#{ val[0].value.to_s }] ,\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 123
+module_eval <<'.,.,', 'Parser.y', 121
+  def _reduce_47( val, _values, result )
+ result = ASTArray.new(val[0], val[2]); puts "x -> TkId[#{ val[0].value.to_s }] [exp] ,\n"
+   result
+  end
+.,.,
+
+module_eval <<'.,.,', 'Parser.y', 124
   def _reduce_48( val, _values, result )
  puts "repeticion -> do y od \n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 126
+module_eval <<'.,.,', 'Parser.y', 127
   def _reduce_49( val, _values, result )
  puts "bloque -> begin instrucciones end"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 129
+module_eval <<'.,.,', 'Parser.y', 130
   def _reduce_50( val, _values, result )
  puts "invocar -> TkId(#{ val[0].value.to_s }) ( w ) \n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 132
+module_eval <<'.,.,', 'Parser.y', 133
   def _reduce_51( val, _values, result )
  puts " w -> w , exp \n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 133
+module_eval <<'.,.,', 'Parser.y', 134
   def _reduce_52( val, _values, result )
  puts "w -> exp"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 136
+module_eval <<'.,.,', 'Parser.y', 137
   def _reduce_53( val, _values, result )
  puts "mostrar -> show auxmostrar"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 140
+module_eval <<'.,.,', 'Parser.y', 141
   def _reduce_54( val, _values, result )
  puts "mostrar -> show exp"
    result
@@ -827,168 +828,168 @@ module_eval <<'.,.,', 'Parser.y', 140
 
  # reduce 55 omitted
 
-module_eval <<'.,.,', 'Parser.y', 144
+module_eval <<'.,.,', 'Parser.y', 145
   def _reduce_56( val, _values, result )
  result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run(@tablaGlobal,@tablaGlobal)}"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 145
+module_eval <<'.,.,', 'Parser.y', 146
   def _reduce_57( val, _values, result )
  result = ASTResta.new(val[0], val[2]);     puts "exp -> exp - exp\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 146
+module_eval <<'.,.,', 'Parser.y', 147
   def _reduce_58( val, _values, result )
  result = ASTMult.new(val[0], val[2]);      puts "exp -> exp * exp\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 147
+module_eval <<'.,.,', 'Parser.y', 148
   def _reduce_59( val, _values, result )
  result = ASTDiv.new(val[0], val[2]);       puts "exp -> exp / exp\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 148
+module_eval <<'.,.,', 'Parser.y', 149
   def _reduce_60( val, _values, result )
  result = ASTRes.new(val[0], val[2]);       puts "exp -> exp % exp\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 149
+module_eval <<'.,.,', 'Parser.y', 150
   def _reduce_61( val, _values, result )
  result = ASTResUnario.new(val[1]);         puts "exp -> - exp\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 150
+module_eval <<'.,.,', 'Parser.y', 151
   def _reduce_62( val, _values, result )
  result = ASTUnario.new(val[1]);            puts "exp -> ( exp )\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 151
-  def _reduce_63( val, _values, result )
- result = ASTUnario.new(val[0]);            puts "exp -> TkNum(#{val[0].value.to_s })\n"
-   result
-  end
-.,.,
-
 module_eval <<'.,.,', 'Parser.y', 152
-  def _reduce_64( val, _values, result )
- result = ASTUnario.new(val[0]);            puts "exp -> TkId(#{val[0].value.to_s})\n"
+  def _reduce_63( val, _values, result )
+ result = ASTNum.new(val[0]);            puts "exp -> TkNum(#{val[0].value.to_s })\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 153
+  def _reduce_64( val, _values, result )
+ result = ASTId.new(val[0]);            puts "exp -> TkId(#{val[0].value.to_s})\n"
+   result
+  end
+.,.,
+
+module_eval <<'.,.,', 'Parser.y', 154
   def _reduce_65( val, _values, result )
  result = ASTArray.new(val[0], val[2]);     puts "exp -> TkId(#{val[0].value.to_s})[exp]\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 154
+module_eval <<'.,.,', 'Parser.y', 155
   def _reduce_66( val, _values, result )
  result = ASTLength.new(val[1]);            puts "exp -> $ TkId(#{val[0].value.to_s})\n"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 157
+module_eval <<'.,.,', 'Parser.y', 158
   def _reduce_67( val, _values, result )
  puts "guardia -> exp operador exp"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 158
+module_eval <<'.,.,', 'Parser.y', 159
   def _reduce_68( val, _values, result )
  puts "guardia -> guardia conector booleano"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 161
+module_eval <<'.,.,', 'Parser.y', 162
   def _reduce_69( val, _values, result )
  puts "booleano -> ~ guardia"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 162
+module_eval <<'.,.,', 'Parser.y', 163
   def _reduce_70( val, _values, result )
  puts "booleano -> true"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 163
+module_eval <<'.,.,', 'Parser.y', 164
   def _reduce_71( val, _values, result )
  puts "booleano -> false"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 165
+module_eval <<'.,.,', 'Parser.y', 166
   def _reduce_72( val, _values, result )
  puts "operador -> <="
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 166
+module_eval <<'.,.,', 'Parser.y', 167
   def _reduce_73( val, _values, result )
  puts "operador -> >="
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 167
+module_eval <<'.,.,', 'Parser.y', 168
   def _reduce_74( val, _values, result )
  puts "operador -> ="
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 168
+module_eval <<'.,.,', 'Parser.y', 169
   def _reduce_75( val, _values, result )
  puts "operador -> !="
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 169
+module_eval <<'.,.,', 'Parser.y', 170
   def _reduce_76( val, _values, result )
  puts "operador -> <"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 170
+module_eval <<'.,.,', 'Parser.y', 171
   def _reduce_77( val, _values, result )
  puts "operador -> >"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 173
+module_eval <<'.,.,', 'Parser.y', 174
   def _reduce_78( val, _values, result )
  puts "conector -> &&"
    result
   end
 .,.,
 
-module_eval <<'.,.,', 'Parser.y', 174
+module_eval <<'.,.,', 'Parser.y', 175
   def _reduce_79( val, _values, result )
  puts "conector -> ||"
    result

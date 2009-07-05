@@ -22,6 +22,9 @@ class SymVar < Sym
 		@line   = line
 		@col    = col
 	end
+  def setValue(dim, val)
+    @value = val
+  end 
 end
 
 class ParIn < SymVar
@@ -34,6 +37,7 @@ end
 class SymArray < Sym 
 	attr_reader :dim
 	attr_accessor :values
+  attr_accessor :value
 	def initialize(str,line, col, dim)
 		@str   = str
 		@line   = line
@@ -41,6 +45,9 @@ class SymArray < Sym
 		@values = Array.new() 
 		@dim = dim
 	end
+  def setValue(dim, val)
+    @values[dim] = val
+  end
 end
 
 class SymProc < Sym

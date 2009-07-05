@@ -24,6 +24,9 @@ class SymTable
 	  @sim.delete(str)
 	end
 
+	def replace(str, sym)
+	  @sim.update({str => sym})
+	end
 end
 
 
