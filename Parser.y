@@ -24,7 +24,19 @@ token UMINUS AUX VACIO VACIO1 TkPipe TkPlus TkMinus TkTimes TkDiv TkSet TkDisy T
 	/* Gramatica */
 
 rule
-inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]); puts "dec procedimiento ppal" }
+inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]); 
+                                    puts "dec procedimiento ppal\n" ;
+                                    puts "\nLa tabla de simbolos es: \n"
+                                    @tablaGlobal.sim.each do |x,y| 
+                                      puts "El valor es #{x}, el simbolo es #{y}"
+                                      if y.class.to_s == "SymProc"
+                                        puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
+                                        y.symtable.sim.each do |x2,y2|
+                                          puts "El valor es #{x2}, el simbolo es #{y2}"
+                                        end
+                                        puts "La tabla de simbolos locales del procedimiento termina.... \n\n"
+                                      end 
+                                    end; }
 ;
 
 /* Reglas de Declaraciones */

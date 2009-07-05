@@ -216,12 +216,14 @@ class ASTProc < ASTMultiple
     # Insertar Valores en la tabla.
     # term3 son los parametros pasados a la tabla
     term3.hijos.each do |hijo|
-      if (hijo.getModo() == 'TkIn') 
+      if (hijo.getModo() == 'in') 
         tabla.insert(hijo.getId(), ParIn.new(hijo.getId(), hijo.getToken().line, hijo.getToken().col)) 
       else
         tabla.insert(hijo.getId(), ParOut.new(hijo.getId(), hijo.getToken.line, hijo.getToken().col))
       end
     end    
+
+    puts tabla.find('j')
 
     # Insertar procedimiento en la Tabla de Simbolos Global.
     simbolo = SymProc.new(term2.value, term1.line, term1.col, AST.new(), tabla)
