@@ -16,7 +16,7 @@ require 'excepciones'
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..idd2072dad63', 'Parser.y', 188
+module_eval <<'..end Parser.y modeval..idacbeb017bb', 'Parser.y', 188
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
@@ -45,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..idd2072dad63
+..end Parser.y modeval..idacbeb017bb
 
 ##### racc 1.4.5 generates ###
 
@@ -456,7 +456,7 @@ module_eval <<'.,.,', 'Parser.y', 26
 
 module_eval <<'.,.,', 'Parser.y', 31
   def _reduce_2( val, _values, result )
- val[0].hijos.push(ASTDec.new(val[2],val[4]));
+ val[0].hijos.push(ASTDec.new(val[2],val[4],@tablaGlobal));
    result
   end
 .,.,
@@ -477,21 +477,21 @@ module_eval <<'.,.,', 'Parser.y', 35
 
 module_eval <<'.,.,', 'Parser.y', 36
   def _reduce_5( val, _values, result )
- result = ASTID.new(); puts "ID -> TkId(#{ val[0].value.to_s })\n"
+ result = ASTID.new(); result.hijos.push(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 39
   def _reduce_6( val, _values, result )
- result = "value"; puts "tipo -> value\n"
+  puts "tipo -> value\n"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 40
   def _reduce_7( val, _values, result )
- result = val[1]
+ result = ASTUnario.new(val[1]) ; puts "tipo -> array of Tknum\n"
    result
   end
 .,.,

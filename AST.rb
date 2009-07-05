@@ -44,15 +44,14 @@ class ASTD < ASTMultiple
 end
 
 class ASTDec < ASTBinario 
-  def initialize(term1, term2)
+  def initialize(term1, term2, tabla)
     super(term1,term2)  
     @term1.hijos.each do |hijo|
-      if (@term2 == 'value') 
-        @tablaGlobal.insert(hijo, SymVar.new(hijo,hijo.line, hijo.col)) 
-      else 
-        @tablaGlobal.insert(hijo, SymArray.new(hijo,hijo.line,hijo.col, hijo)) 
+      if (@term2.value == 'value') 
+        tabla.insert(hijo, SymVar.new(hijo,hijo.line, hijo.col)) 
+      else
+        tabla.insert(hijo, SymArray.new(hijo,hijo.line,hijo.col,term2))
       end
-        puts " EL valor es #{@term2.value}"
     end
   end
 end
@@ -122,4 +121,6 @@ class ASTUnario < AST
   def run(symtable, symtableG) 
     return term1.value
   end
-end 
+end
+
+ 

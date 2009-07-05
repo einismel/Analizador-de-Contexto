@@ -29,16 +29,16 @@ inicio : dec procedimiento ppal   { inicio = ASTTernario.new(val[0],val[1],val[2
 
 /* Reglas de Declaraciones */
 
-dec : dec TkVar ID TkPP tipo      { val[0].hijos.push(ASTDec.new(val[2],val[4]));} 
+dec : dec TkVar ID TkPP tipo      { val[0].hijos.push(ASTDec.new(val[2],val[4],@tablaGlobal));} 
 |                                 { result = ASTD.new(); }   
 ;
 
 ID: ID TkComa TkId                { result.hijos.push(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
-| TkId                            { result = ASTID.new(); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
+| TkId                            { result = ASTID.new(); result.hijos.push(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
 ;
 
-tipo: TkValue                     { result = "value"; puts "tipo -> value\n" } 
-| TkArrayOf TkNum                 { result = val[1] } 
+tipo: TkValue                     {  puts "tipo -> value\n" } 
+| TkArrayOf TkNum                 { result = ASTUnario.new(val[1]) ; puts "tipo -> array of Tknum\n"} 
 ;
 
 /* Reglas de Procedimientos */
