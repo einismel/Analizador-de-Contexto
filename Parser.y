@@ -24,51 +24,56 @@ token UMINUS AUX VACIO VACIO1 TkPipe TkPlus TkMinus TkTimes TkDiv TkSet TkDisy T
 	/* Gramatica */
 
 rule
-inicio : dec procedimiento ppal   { inicio = ASTTernario.new(val[0],val[1],val[2]); puts "dec procedimiento ppal" }
+inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]); puts "dec procedimiento ppal" }
 ;
 
 /* Reglas de Declaraciones */
 
 dec : dec TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4],@tablaGlobal));} 
-|                                 { result = ASTD.new(); }   
+    |                             { result = ASTD.new(); }   
 ;
 
 ID: ID TkComa TkId                { result.insertaHijo(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
-| TkId                            { result = ASTID.new(); result.insertaHijo(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
+  | TkId                          { result = ASTID.new(); result.insertaHijo(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
 ;
 
 tipo: TkValue                     { puts "tipo -> value\n" } 
-| TkArrayOf TkNum                 { result = ASTUnario.new(val[1]) ; puts "tipo -> array of Tknum\n"} 
+    | TkArrayOf TkNum             { result = ASTUnario.new(val[1]) ; puts "tipo -> array of Tknum\n"} 
 ;
 
 /* Reglas de Procedimientos */
 
-procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs dec instsp { puts "procedimiento -> procedimiento proc TkId(#{val[3].value.to_s}) ( z ) as dec instsp\n" }
-              |                                                       { puts "procedimiento -> lambda" }
+procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs dec instsp { val[0].hijos << val[1] << val[2] << val[4] << val[7] << val[8]; 
+                                                                        puts "procedimiento -> procedimiento proc TkId(#{val[3].value.to_s}) ( z ) as dec instsp\n" }
+              |                                                       { result = ASTProc(@tablaGlobal); puts "procedimiento -> lambda" }
 ;
 
-z : z TkComa modo TkId			  { puts "z -> z , modo TkId(#{ val[3].value.to_s }) \n" }
-  | modo TkId                     { puts "z -> modo TkId(#{ val[1].value.to_s }) \n" }
+z : z TkComa modo TkId			  { val[0].insertaHijo(ASTParametros.new(val[2], val[3])); 
+                                puts "z -> z , modo TkId(#{ val[3].value.to_s }) \n" }
+  | modo TkId                 { result = ASTMultiple.new(); 
+                                result.insertaHijo(ASTParametros.new(val[0],val[1])); 
+                                puts "z -> modo TkId(#{ val[1].value.to_s }) \n" }
 ;
 
 modo : TkIn                        { puts "modo -> TkIn\n" } 
      | TkOut                       { puts "modo -> TkOut\n" }
 ;
 
-instsp  :  TkSkip                           { puts "instsp -> skip\n" }
-		|  seleccionp                            { puts "instsp -> seleccionp\n" }
-		|  asignacion                           { puts "instsp -> asignacion\n"}
-		|  repeticionp                           { puts "instsp -> repeticionp\n"}
-		|  bloquep                               { puts "instsp -> bloquep\n"}
-		|  invocar                              { puts "instsp -> invocar\n"}
-		|  mostrar                              { puts "instsp -> mostrar\n"}
-		|  TkReturn                   { puts "instsp -> TkReturn\n" } 
+instsp  :  TkSkip                         { puts "instsp -> skip\n" }
+		    |  seleccionp                     { puts "instsp -> seleccionp\n" }
+		    |  asignacion                     { puts "instsp -> asignacion\n"}
+		    |  repeticionp                    { puts "instsp -> repeticionp\n"}
+		    |  bloquep                        { puts "instsp -> bloquep\n"}
+		    |  invocar                        { puts "instsp -> invocar\n"}
+		    |  mostrar                        { puts "instsp -> mostrar\n"}
+		    |  TkReturn                       { puts "instsp -> TkReturn\n" } 
 ;
 
 seleccionp:  TkIf yp TkFi                 { puts "seleccionp -> if yp fi\n" }
 ;
-yp: yp TkPipe ifauxp                              { puts "yp -> yp | aifauxp\n" }
-| ifauxp									{ puts "yp -> ifauxp\n" }
+
+yp: yp TkPipe ifauxp                      { puts "yp -> yp | aifauxp\n" }
+  | ifauxp									              { puts "yp -> ifauxp\n" }
 ;
 
 ifauxp: guardia TkAsigD instsp            { puts "ifauxp -> guardia <- instsp\n"}
@@ -81,7 +86,7 @@ bloquep: TkBegin instruccionesp TkEnd     { puts "bloquep -> begin instrucciones
 ;
 
 instruccionesp: instruccionesp TkPC instsp			   { puts "ppal -> instruccionesp ; instsp \n" }
-			  | instsp                                 { puts "instruccionesp -> instsp\n" }
+			        | instsp                                 { puts "instruccionesp -> instsp\n" }
 ;
 
 /* Reglas del Main */
@@ -90,51 +95,59 @@ ppal: TkMain instrucciones TkEnd        { result = ASTUnario.new(val[1]); puts "
 ;
 
 instrucciones : instrucciones TkPC insts              { val[0].insertaHijo(ASTUnario.new(val[2])); puts "ppal -> instrucciones ; insts \n" }
-              | insts                                 { result = ASTMultiple.new(); result.insertaHijo(ASTUnario.new(val[0])); puts "instrucciones -> insts\n" } /* Debe existir por lo menos una instruccion en el main */
+              | insts                                 { result = ASTMultiple.new(); 
+                                                        result.insertaHijo(ASTUnario.new(val[0])); 
+                                                        puts "instrucciones -> insts\n" } /* Debe existir por lo menos una instruccion en el main */
 ;
 
-insts : TkSkip                           { puts "insts -> skip\n" }
+insts : TkSkip                           { result = ASTUnario.new(val[0]); puts "insts -> skip\n" }
       | seleccion                        { puts "insts -> seleccion\n" }
-      | asignacion                       { result = ASTUnario.new(val[0]); puts "insts -> asignacion\n"}
+      | asignacion                       { puts "insts -> asignacion\n"}
       | repeticion                       { puts "insts -> repeticion\n"}
       | bloque                           { puts "insts -> bloque\n"}
       | invocar                          { puts "insts -> invocar\n"}
       | mostrar                          { puts "insts -> mostrar\n"}
 ;
 
-seleccion:  TkIf y TkFi                 { puts "seleccion -> if y fi\n" }
+seleccion:  TkIf y TkFi                 { result = ASTUnario.new(val[0]); puts "seleccion -> if y fi\n" }
 ;
 
-y : y TkPipe ifaux                      { puts "y -> y | aifaux\n" }
-  | ifaux									              { puts "y -> ifaux\n" }
+y : y TkPipe ifaux                      { val[0].insertaHijo(val[2]);  puts "y -> y | aifaux\n" }
+  | ifaux									              { result = ASTMultiple.new(); 
+                                          result.insertaHijo(val[0]); 
+                                          puts "y -> ifaux\n" }
 ;
 
-ifaux: guardia TkAsigD insts            { puts "ifaux -> guardia <- insts\n"}
+ifaux: guardia TkAsigD insts            { result = ASTBinario.new(val[0], val[2]); puts "ifaux -> guardia <- insts\n"}
 ; 
 
 /*Las siguientes 2 instrucciones tienen una precedencia menor a las operaciones aritmeticas */
 asignacion: x TkComa asignacion TkComa exp =VACIO1            { val[0].insertaHijo(ASTAsig.new(val[2],val[4],@tablaGlobal)); puts "asignacion -> x asignacion , exp" }					 
-          | x TkAsigI exp                           =VACIO1   { result= ASTMultiple.new(); result.insertaHijo(ASTAsig.new(val[0],val[2],@tablaGlobal)); puts "asignacion -> TkId(#{val[0].value.to_s }) <-  exp" } 
+          | x TkAsigI exp                           =VACIO1   { result= ASTMultiple.new(); 
+                                                                result.insertaHijo(ASTAsig.new(val[0],val[2],@tablaGlobal)); 
+                                                                puts "asignacion -> TkId(#{val[0].value.to_s }) <-  exp" } 
 ;
 
-x: TkId                          { result = ASTId.new(val[0]); puts "x -> TkId[#{ val[0].value.to_s }] ,\n" } 
-|  TkId TkAC exp TkCC            { result = ASTArray.new(val[0], val[2]); puts "x -> TkId[#{ val[0].value.to_s }] [exp] ,\n" } 
+x : TkId                            { result = ASTId.new(val[0]); puts "x -> TkId[#{ val[0].value.to_s }] ,\n" } 
+  |  TkId TkAC exp TkCC             { result = ASTArray.new(val[0], val[2]); puts "x -> TkId[#{ val[0].value.to_s }] [exp] ,\n" } 
 ;
 
-repeticion: TkDo y TkOd                 { puts "repeticion -> do y od \n" }
+repeticion: TkDo y TkOd                 { result = ASTUnario.new(val[0]); puts "repeticion -> do y od \n" }
 ;
 
-bloque: TkBegin instrucciones TkEnd     { puts "bloque -> begin instrucciones end" }
+bloque: TkBegin instrucciones TkEnd     { result = ASTUnario.new(val[1]); puts "bloque -> begin instrucciones end" }
 ;
 
-invocar: TkId TkAP w TkCP          { puts "invocar -> TkId(#{ val[0].value.to_s }) ( w ) \n"}
+invocar: TkId TkAP w TkCP           { result = ASTBinario.new(val[0],val[2]); puts "invocar -> TkId(#{ val[0].value.to_s }) ( w ) \n"}
 ;
 
-w : w TkComa exp                    { puts " w -> w , exp \n" }  
-  | exp                             { puts "w -> exp"}
+w : w TkComa exp                    { val[0].insertaHijo(val[2]); puts " w -> w , exp \n" }  
+  | exp                             { result = ASTMultiple.new(); 
+                                      result.insertaHijo(val[0]); 
+                                      puts "w -> exp"}
 ;
 
-mostrar : TkShow auxmostrar			{ puts "mostrar -> show auxmostrar"} 
+mostrar : TkShow auxmostrar			{ result = ASTUnario.new(val[1]); puts "mostrar -> show auxmostrar"} 
 ;
 
 /* La precedencia  de la siguiente instruccion es menor a las operaciones aritmeticas */
@@ -155,25 +168,21 @@ exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El
     | TkLength TkId        { result = ASTLength.new(val[1]);            puts "exp -> $ TkId(#{val[0].value.to_s})\n" }
 ;
 
-guardia : exp operador exp            { puts "guardia -> exp operador exp" }
-        | guardia conector booleano   { puts "guardia -> guardia conector booleano" }
+guardia : guardia TkConj booleano       { result = ASTConj.new(val[0], val[2]); puts "guardia -> guardia && booleano" }
+        | guardia TkDisy booleano       { result = ASTDisy.new(val[0], val[2]); puts "guardia -> guardia || booleano" }
+        | TkNeg guardia                 { result = ASTNeg.new(val[1]);          puts "guardia -> ~ guardia" }
+        | booleano                      { puts "guardia -> booleano"}
 ;
 
-booleano: TkNeg guardia               { puts "booleano -> ~ guardia" }
-        | TkTrue                      { puts "booleano -> true" }
-        | TkFalse                     { puts "booleano -> false" }; 
-
-operador: TkLE                        { puts "operador -> <="} 
-        | TkGE                        { puts "operador -> >="} 
-        | TkSet                       { puts "operador -> ="} 
-        | TkDif                       { puts "operador -> !="} 
-        | TkLess                      { puts "operador -> <"} 
-        | TkGreat                     { puts "operador -> >"} 
-;
-
-conector: TkConj                      { puts "conector -> &&"} 
-        | TkDisy                      { puts "conector -> ||"} 
-;
+booleano: exp TkLE exp                { result = ASTLeq.new(val[0], val[2]); puts "guardia -> exp operador exp" }
+        | exp TkGE exp                { result = ASTGeq.new(val[0], val[2]); puts "guardia -> exp operador exp" }
+        | exp TkSet exp               { result = ASTEqual.new(val[0], val[2]); puts "guardia -> exp operador exp" }
+        | exp TkDif exp               { result = ASTDif.new(val[0], val[2]); puts "guardia -> exp operador exp" }
+        | exp TkLess exp              { result = ASTLess.new(val[0], val[2]); puts "guardia -> exp operador exp" }
+        | exp TkGreat exp             { result = ASTGreat.new(val[0], val[2]); puts "guardia -> exp operador exp" }
+        | TkTrue                      { puts "guardia -> true" }
+        | TkFalse                     { puts "guardia -> false" }
+; 
 
 end # RubyCalcParser
 

@@ -1,7 +1,7 @@
 var i, j : value
 var k : array of 2
 main
-if i > j -> k[0] <- 1+2
+if i > j && j>k -> k[0] <- 1+2
 |  2 < j -> k[1] <- j
 fi
 end

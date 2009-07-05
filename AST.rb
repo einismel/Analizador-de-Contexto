@@ -142,10 +142,9 @@ class ASTDis < ASTBool
   end
 end
   
-class ASTNeg < ASTBool
+class ASTNeg < ASTUnario
   def run(symtable, symtableG)
     exp1 = @exp1.run(symtable,symtableG)
-	  exp2 = @exp2.run(symtable,symtableG)
 	  return !exp1
   end
 end
@@ -200,7 +199,52 @@ end
 
 # Nuevos Arboles
 
+class ASTCuaternario < AST
+  attr_accessor :term1,:term2, :term3, :term4
+	def initialize(term1, term2, term3, term4)
+		@term1 = term1
+		@term2 = term2
+		@term3 = term3
+		@term4 = term4
+	end
+end
+
+class ASTProc < ASTMultiple
+  def initialize(tablaGlobal)
+    super(term1, term2)
+ 
+    # Crear la tabla.    
+    tabla = Symtable.new()
+  
+    # Insertar Valores en la tabla.
+    # @term2 son los parametros pasados a la tabla
+    @term2.hijos.each do |hijo|
+      if (hijo.getModo() == 'TkIn') 
+        tabla.insert(hijo.value, ParIn.new(hijo.value,hijo.line, hijo.col)) 
+      else
+        tabla.insert(hijo.value, ParOut.new(hijo.value,hijo.line,hijo.col))
+      end
+    end    
+
+    # Insertar procedimiento en la Tabla de Simbolos Global.
+      simbolo = SymProc.new(str, line, col, ast.new(), symtable)
+      tablaGlobal.insert(@term1,simbolo)
+  end
+end
+
+class ASTParametros < ASTBinario
+  def getModo()
+    return @term1.value.to_s
+  end
+  def getId()
+    return @term2.value.to_s
+  end
+end
+
 class ASTNum < ASTUnario
+  def value()
+   return @term1.value 
+  end
   def run(symtable, symtableG)
    return @term1.value 
   end
@@ -219,6 +263,9 @@ class ASTId < ASTUnario
 end
 
 class ASTArray < ASTBinario
+  def value()
+   return @term1.value 
+  end
   def getId()
     return @term1.value
   end

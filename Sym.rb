@@ -27,8 +27,7 @@ class SymVar < Sym
   end 
 end
 
-class ParIn < SymVar
-	
+class ParIn < SymVar	
 end
 
 class ParOut < SymVar
