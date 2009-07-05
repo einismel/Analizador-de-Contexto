@@ -43,9 +43,9 @@ tipo: TkValue                     { puts "tipo -> value\n" }
 
 /* Reglas de Procedimientos */
 
-procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs dec instsp { val[0].hijos << val[1] << val[2] << val[4] << val[7] << val[8]; 
+procedimiento : procedimiento TkProc TkId TkAP z TkCP TkAs dec instsp { val[0].insertaHijo(ASTProc.new(val[1], val[2], val[4], val[7],val[8])); 
                                                                         puts "procedimiento -> procedimiento proc TkId(#{val[3].value.to_s}) ( z ) as dec instsp\n" }
-              |                                                       { result = ASTProc(@tablaGlobal); puts "procedimiento -> lambda" }
+              |                                                       { result = ASTMultiple.new(); puts "procedimiento -> lambda" }
 ;
 
 z : z TkComa modo TkId			  { val[0].insertaHijo(ASTParametros.new(val[2], val[3])); 
@@ -59,34 +59,38 @@ modo : TkIn                        { puts "modo -> TkIn\n" }
      | TkOut                       { puts "modo -> TkOut\n" }
 ;
 
-instsp  :  TkSkip                         { puts "instsp -> skip\n" }
+instsp  :  TkSkip                         { result = ASTUnario.new(val[0]); puts "instsp -> skip\n" }
+		    |  TkReturn                       { result = ASTUnario.new(val[0]); puts "instsp -> TkReturn\n" } 
 		    |  seleccionp                     { puts "instsp -> seleccionp\n" }
 		    |  asignacion                     { puts "instsp -> asignacion\n"}
 		    |  repeticionp                    { puts "instsp -> repeticionp\n"}
 		    |  bloquep                        { puts "instsp -> bloquep\n"}
 		    |  invocar                        { puts "instsp -> invocar\n"}
 		    |  mostrar                        { puts "instsp -> mostrar\n"}
-		    |  TkReturn                       { puts "instsp -> TkReturn\n" } 
 ;
 
-seleccionp:  TkIf yp TkFi                 { puts "seleccionp -> if yp fi\n" }
+seleccionp:  TkIf yp TkFi                 { result = ASTUnario.new(val[1]); puts "seleccionp -> if yp fi\n" }
 ;
 
-yp: yp TkPipe ifauxp                      { puts "yp -> yp | aifauxp\n" }
-  | ifauxp									              { puts "yp -> ifauxp\n" }
+yp: yp TkPipe ifauxp                      { val[0].insertaHijo(val[2]); puts "yp -> yp | aifauxp\n" }
+  | ifauxp									              { result = ASTMultiple.new(); 
+                                            result.insertaHijo(val[0]); 
+                                            puts "yp -> ifauxp\n" }
 ;
 
-ifauxp: guardia TkAsigD instsp            { puts "ifauxp -> guardia <- instsp\n"}
+ifauxp: guardia TkAsigD instsp            { result = ASTBinario.new(val[0], val[2]); puts "ifauxp -> guardia <- instsp\n"}
 ;
 
-repeticionp: TkDo yp TkOd                 { puts "repeticion -> do yp od \n" }
+repeticionp: TkDo yp TkOd                 { result = ASTUnario.new(val[1]); puts "repeticion -> do yp od \n" }
 ;
 
-bloquep: TkBegin instruccionesp TkEnd     { puts "bloquep -> begin instruccionesp end" }
+bloquep: TkBegin instruccionesp TkEnd     { result = ASTUnario.new(val[1]); puts "bloquep -> begin instruccionesp end" }
 ;
 
-instruccionesp: instruccionesp TkPC instsp			   { puts "ppal -> instruccionesp ; instsp \n" }
-			        | instsp                                 { puts "instruccionesp -> instsp\n" }
+instruccionesp: instruccionesp TkPC instsp			    { val[0].insertaHijo(ASTUnario.new(val[2])); puts "ppal -> instruccionesp ; instsp \n" }
+			        | instsp                              { result = ASTMultiple.new(); 
+                                                      result.insertaHijo(ASTUnario.new(val[0])); 
+                                                      puts "instruccionesp -> instsp\n" }
 ;
 
 /* Reglas del Main */
@@ -109,7 +113,7 @@ insts : TkSkip                           { result = ASTUnario.new(val[0]); puts 
       | mostrar                          { puts "insts -> mostrar\n"}
 ;
 
-seleccion:  TkIf y TkFi                 { result = ASTUnario.new(val[0]); puts "seleccion -> if y fi\n" }
+seleccion:  TkIf y TkFi                 { result = ASTUnario.new(val[1]); puts "seleccion -> if y fi\n" }
 ;
 
 y : y TkPipe ifaux                      { val[0].insertaHijo(val[2]);  puts "y -> y | aifaux\n" }

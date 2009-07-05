@@ -210,7 +210,7 @@ class ASTCuaternario < AST
 end
 
 class ASTProc < ASTMultiple
-  def initialize(tablaGlobal)
+  def initialize(term1,term2, term3, term4, term5, tablaGlobal)
     super(term1, term2)
  
     # Crear la tabla.    
@@ -227,8 +227,8 @@ class ASTProc < ASTMultiple
     end    
 
     # Insertar procedimiento en la Tabla de Simbolos Global.
-      simbolo = SymProc.new(str, line, col, ast.new(), symtable)
-      tablaGlobal.insert(@term1,simbolo)
+    simbolo = SymProc.new(@term2.value, @term1.line, @term1.col, AST.new(), tabla)
+    tablaGlobal.insert(@term2.value,simbolo)
   end
 end
 
