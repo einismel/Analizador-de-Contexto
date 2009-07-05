@@ -210,7 +210,7 @@ end
 class ASTProc < ASTMultiple
   def initialize(term1,term2, term3, term4, term5, term6)
  
-    # Crear la tabla.    
+    # Crear la tabla y se le pasa el arbol.    
     tabla = term4.tablaProc
     arbol = term6
 

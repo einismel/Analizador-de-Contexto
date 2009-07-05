@@ -16,7 +16,7 @@ require 'excepciones'
 
 class RubyCalcParser < Racc::Parser
 
-module_eval <<'..end Parser.y modeval..id14166395fd', 'Parser.y', 217
+module_eval <<'..end Parser.y modeval..idb6e668fac9', 'Parser.y', 217
 def initialize(lexer)
 @ast = nil
 @lexer = lexer
@@ -45,7 +45,7 @@ end
   end
 
 
-..end Parser.y modeval..id14166395fd
+..end Parser.y modeval..idb6e668fac9
 
 ##### racc 1.4.5 generates ###
 
@@ -490,7 +490,7 @@ module_eval <<'.,.,', 'Parser.y', 38
                                       puts "El valor es #{x}, el simbolo es #{y}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
-                                        y.symtable.sim.each do |x2,y2|
+                                        y.symtables[0].sim.each do |x2,y2|
                                           puts "El valor es #{x2}, el simbolo es #{y2}"
                                         end
                                         puts "La tabla de simbolos locales del procedimiento termina.... \n\n"

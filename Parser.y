@@ -31,7 +31,7 @@ inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]);
                                       puts "El valor es #{x}, el simbolo es #{y}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
-                                        y.symtable.sim.each do |x2,y2|
+                                        y.symtables[0].sim.each do |x2,y2|
                                           puts "El valor es #{x2}, el simbolo es #{y2}"
                                         end
                                         puts "La tabla de simbolos locales del procedimiento termina.... \n\n"
@@ -240,5 +240,3 @@ end
   def on_error(t, val, vstack)
     raise ParseError, sprintf("\nError sintactico cerca del valor %s (%s)", val.class.inspect, val.to_s || '?')
   end
-
-

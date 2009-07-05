@@ -51,12 +51,15 @@ end
 
 class SymProc < Sym
 	attr_reader :ast
-	attr_accessor :symtable
+	attr_accessor :symtables
 	def initialize(str,line, col, ast, symtable)
 		@str   = str
 		@line   = line
 		@col    = col
-		@symtable = symtable
+		@symtables = Array.new 
+    @symtables.push(symtable)
 		@ast = ast
 	end
+  def buscar
+  end 
 end
