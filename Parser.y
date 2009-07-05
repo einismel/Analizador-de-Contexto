@@ -27,11 +27,13 @@ rule
 inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]); 
                                     puts "dec procedimiento ppal\n" ;
                                     puts "\nLa tabla de simbolos es: \n"
-                                    $tablaGlobal.sim.each do |x,y| 
+                                    $tablaGlobal.key.each do |x| 
+                                      y = $tablaGlobal.find(x)
                                       puts "El valor es #{x}, el simbolo es #{y}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
-                                        y.symtables[0].sim.each do |x2,y2|
+                                        y.symtables[0].key.each do |x2|
+                                          y2 = y.symtables[0].find(x2)
                                           puts "El valor es #{x2}, el simbolo es #{y2}"
                                         end
                                         puts "La tabla de simbolos locales del procedimiento termina.... \n\n"
@@ -45,12 +47,12 @@ dec : dec TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4],
     |                             { result = ASTMultiple.new(); }   
 ;
 
-ID: ID TkComa TkId                { result.insertaHijo(val[2]); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
-  | TkId                          { result = ASTMultiple.new(); result.insertaHijo(val[0]); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
+ID: ID TkComa TkId                { result.insertaHijo(ASTId.new(val[2])); puts "ID -> ID , TkId(#{ val[2].value.to_s }) \n" } 
+  | TkId                          { result = ASTMultiple.new(); result.insertaHijo(ASTId.new(val[0])); puts "ID -> TkId(#{ val[0].value.to_s })\n" }
 ;
 
 tipo: TkValue                     { puts "tipo -> value\n" } 
-    | TkArrayOf TkNum             { result = ASTUnario.new(val[1]) ; puts "tipo -> array of Tknum\n"} 
+    | TkArrayOf TkNum             { result = ASTNum.new(val[1]) ; puts "tipo -> array of Tknum\n"} 
 ;
 
 /* Reglas de Procedimientos */
@@ -64,10 +66,10 @@ decp : decp TkVar ID TkPP tipo      { val[0].insertaHijo(ASTDec.new(val[2],val[4
     |                               { result = ASTDecTotal.new(); }   
 ;
 
-z : z TkComa modo TkId			  { val[0].insertaHijo(ASTParametros.new(val[2], val[3])); 
+z : z TkComa modo TkId			  { val[0].insertaHijo(ASTParametros.new(val[2], ASTId.new(val[3]))); 
                                 puts "z -> z , modo TkId(#{ val[3].value.to_s }) \n" }
   | modo TkId                 { result = ASTMultiple.new(); 
-                                result.insertaHijo(ASTParametros.new(val[0],val[1])); 
+                                result.insertaHijo(ASTParametros.new(val[0],ASTId.new(val[1]))); 
                                 puts "z -> modo TkId(#{ val[1].value.to_s }) \n" }
 ;
 

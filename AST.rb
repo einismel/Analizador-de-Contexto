@@ -50,23 +50,17 @@ class ASTMultiple < AST
   end
 end
 
-class ASTD < ASTMultiple
-end
-
 class ASTDec < ASTBinario 
   def initialize(term1, term2, tabla)
     super(term1,term2)
     @term1.hijos.each do |hijo|
       if (@term2.class.to_s == 'TkValue') 
-        tabla.insert(hijo.value, SymVar.new(hijo.value,hijo.line, hijo.col)) 
+        tabla.insert(hijo.getId(), SymVar.new(hijo.getId(),hijo.getToken().line, hijo.getToken().col)) 
       else
-        tabla.insert(hijo.value, SymArray.new(hijo.value,hijo.line,hijo.col,term2))
+        tabla.insert(hijo.getId(), SymArray.new(hijo.getId(),hijo.getToken().line,hijo.getToken().col,term2))
       end
     end
   end
-end
-
-class ASTID < ASTMultiple
 end
 
 class ASTMath < ASTBinario
@@ -75,15 +69,15 @@ class ASTMath < ASTBinario
 end
 
 class ASTSuma < ASTMath
-  def check(symtble, symtableG)
+  def check(symtable, symtableG)
     chterm1 = @term1.check(symtable)  
     chterm2 = @term2.check(symtable)
-	if chterm1 && chterm2
-	  return true
-	else
-	  # aun no se manejan las excepciones
-	  return false
-	end
+    if chterm1 && chterm2
+      return true
+    else
+      # aun no se manejan las excepciones
+      return false
+    end
   end
   def run(symtable)
     term1 = @term1.run(symtable)  
@@ -96,11 +90,11 @@ class ASTResta < ASTMath
   def check(symtble, symtableG)
     chterm1 = @term1.check(symtable)  
     chterm2 = @term2.check(symtable)
-	if chterm1 && chterm2
-	  return true
-	else
-	  return false
-	end
+    if chterm1 && chterm2
+      return true
+    else
+      return false
+    end
   end
   def run(symtable) 
     term1 = @term1.run(symtable)  
@@ -113,11 +107,11 @@ class ASTMult < ASTMath
   def check(symtble, symtableG)
     chterm1 = @term1.check(symtable)  
     chterm2 = @term2.check(symtable)
-	if chterm1 && chterm2
-	  return true
-	else
-	  return false
-	end
+    if chterm1 && chterm2
+      return true
+    else
+      return false
+    end
   end
   def run(symtable) 
     term1 = @term1.run(symtable)  
@@ -130,11 +124,11 @@ class ASTDiv < ASTMath
   def check(symtable)
     chterm1 = @term1.check(symtable)  
     chterm2 = @term2.check(symtable)
-	if chterm1 && chterm2
-	  return true
-	else
-	  return false
-	end
+    if chterm1 && chterm2
+      return true
+    else
+      return false
+    end
   end
   def run(symtable)
     term1 = @term1.run(symtable)  
@@ -313,22 +307,28 @@ class ASTId < ASTUnario
   def value()
     return @term1.value
   end
+  def getToken()
+    return @term1
+  end
   def getId()
     return @term1.value
   end 
   def getPosicion()
     return 0
   end
-  def check(symtable, symtableG)
+
+  def check(symtable)
     # se chequea que haya sido declarada
-    elem = symtableG.find(@term1.value)
-	# se debe chequear que no se use un arreglo como una variable
-	if elem.class.to_s == "SymVar"
-	  return true
-	else 
-	  return false
-	end
+    elem = $tablaGlobal.find(@term1.value)
+    elem2 = symtable.find(@term1.value)
+	  # se debe chequear que no se use un arreglo como una variable
+	  if elem.class.to_s == "SymVar" ||  elem2.class.to_s == "SymVar"
+	    return true
+	  else 
+	    return false
+	  end
   end
+
 end
 
 class ASTArray < ASTBinario
@@ -341,9 +341,9 @@ class ASTArray < ASTBinario
   def getPosicion()
     return @term2.value
   end
-  def check(symtable, symtableG)
+  def check(symtable)
     # se chequea que haya sido declarada
-    elem = symtableG.find(@term1.value)
+    elem = $tablaGlobal.find(@term1.value)
 	# se debe chequear que no se use una variable como un arreglo
 	if elem.class.to_s == "SymArray"
 	  return true

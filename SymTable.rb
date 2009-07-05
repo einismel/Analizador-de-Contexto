@@ -7,27 +7,25 @@
 #  Tabla de Simbolos del compilador del lenguaje yisiel.
 
 class SymTable 
-  attr_accessor :sim
+  attr_accessor :key, :value
 	def initialize()
-	  @sim = Hash.new()
+	  @key = Array.new()
+	  @value = Array.new()
 	end
 
 	def insert(str, symbol)
-	  @sim.store(str, symbol)
+    @key.push(str)
+    @value.push(symbol)
 	end
 
 	def find(str) 
-	  return @sim[str]
+	  return @value[@key.index(str)]
 	end
 
 	def delete(str)
-	  @sim.delete(str)
 	end
 
 	def replace(str, sym)
-	  @sim.update({str => sym})
+	  @value[@key.index(str)]= sym
 	end
 end
-
-
-

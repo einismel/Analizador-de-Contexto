@@ -1,4 +1,4 @@
-var c, j : value
+var c, c, t : value
 proc procedimiento1(in a, in b, out c) as var t : array of 3
 begin
 c <- 1 + 2;
