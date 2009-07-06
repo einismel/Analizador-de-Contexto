@@ -19,7 +19,11 @@ class SymTable
 	end
 
 	def find(str) 
-	  return @value[@key.index(str)]
+	  if @key.index(str).nil?
+        return nil
+      else		
+	    return @value[@key.index(str)]
+	  end
 	end
 
 	def delete(str)

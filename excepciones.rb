@@ -15,3 +15,12 @@ end
 # Descripción: Excepción que maneja los caracteres que no reconoce el lexer.
 class CaracterInesperado < RuntimeError
 end
+
+# Descripción: Excepción que maneja los errores de utilizacion de tipo
+class ErrdeTipo < RuntimeError
+end
+
+# Descripción: Excepción que maneja los errores cuando no se declara una variable usada en el programa
+class VarNoDec < RuntimeError
+end
+

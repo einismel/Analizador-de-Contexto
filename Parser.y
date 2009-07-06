@@ -29,7 +29,7 @@ inicio : dec procedimiento ppal   { ASTTernario.new(val[0],val[1],val[2]);
                                     puts "\nLa tabla de simbolos es: \n"
                                     $tablaGlobal.key.each do |x| 
                                       y = $tablaGlobal.find(x)
-                                      puts "El valor es #{x}, el simbolo es #{y}"
+                                      puts "El valor es #{x}, el simbolo es #{y.value}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
                                         y.symtables[0].key.each do |x2|
@@ -177,7 +177,7 @@ auxmostrar:  exp               =VACIO1     { puts "mostrar -> show exp" }
           |  TkStr             
 ;
 
-exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run($tablaGlobal)}"}
+exp : exp TkPlus exp       { result = ASTSuma.new(val[0], val[2]);      result.check($tablaGlobal)}
     | exp TkMinus exp      { result = ASTResta.new(val[0], val[2]);     puts "exp -> exp - exp\n" }
     | exp TkTimes exp      { result = ASTMult.new(val[0], val[2]);      puts "exp -> exp * exp\n" }
     | exp TkDiv exp        { result = ASTDiv.new(val[0], val[2]);       puts "exp -> exp / exp\n" }

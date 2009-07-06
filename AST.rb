@@ -69,32 +69,21 @@ class ASTMath < ASTBinario
 end
 
 class ASTSuma < ASTMath
-  def check(symtable, symtableG)
-    chterm1 = @term1.check(symtable)  
-    chterm2 = @term2.check(symtable)
-    if chterm1 && chterm2
-      return true
-    else
-      # aun no se manejan las excepciones
-      return false
-    end
+  def check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
-    term1 = @term1.run(symtable)  
-    term2 = @term2.run(symtable)  
+    term1 = @term1.run(symtable) 
+    term2 = @term2.run(symtable) 	
     return term1 + term2
   end
 end
 
 class ASTResta < ASTMath
-  def check(symtble, symtableG)
-    chterm1 = @term1.check(symtable)  
-    chterm2 = @term2.check(symtable)
-    if chterm1 && chterm2
-      return true
-    else
-      return false
-    end
+  def check(symtble)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable) 
     term1 = @term1.run(symtable)  
@@ -104,14 +93,9 @@ class ASTResta < ASTMath
 end
 
 class ASTMult < ASTMath
-  def check(symtble, symtableG)
-    chterm1 = @term1.check(symtable)  
-    chterm2 = @term2.check(symtable)
-    if chterm1 && chterm2
-      return true
-    else
-      return false
-    end
+  def check(symtble)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable) 
     term1 = @term1.run(symtable)  
@@ -122,13 +106,8 @@ end
 
 class ASTDiv < ASTMath
   def check(symtable)
-    chterm1 = @term1.check(symtable)  
-    chterm2 = @term2.check(symtable)
-    if chterm1 && chterm2
-      return true
-    else
-      return false
-    end
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)  
@@ -139,12 +118,7 @@ end
 
 class ASTResUnario < ASTUnario
   def check(symtable, symtableG)
-    chterm1 = @term1.check(symtable)  
-	  if chterm1
-	    return true
-	  else
-	    return false
-	  end
+    @term1.check(symtable)  
   end
   def run(symtable) 
     term1 = @term1.run(symtable)  
@@ -154,13 +128,8 @@ end
 
 class ASTRes < ASTMath
   def check(symtable)
-    chterm1 = @term1.check(symtable)  
-    chterm2 = @term2.check(symtable)
-	  if chterm1 && chterm2
-	    return true
-	  else
-	    return false
-	  end
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable) 
     term1 = @term1.run(symtable)  
@@ -175,22 +144,33 @@ class ASTBool < ASTBinario
 end
 
 class ASTConj < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     exp1 = @exp1.run(symtable)
-	  exp2 = @exp2.run(symtable)
-	  return exp1 && exp2
+	exp2 = @exp2.run(symtable)
+	return exp1 && exp2
   end
 end
 
 class ASTDis < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     exp1 = @exp1.run(symtable)
-	  exp2 = @exp2.run(symtable)
-	  return exp1 || exp2
+	exp2 = @exp2.run(symtable)
+	return exp1 || exp2
   end
 end
   
 class ASTNeg < ASTUnario
+  def check(symtable)
+    @exp1.check(symtable)  
+  end
   def run(symtable)
     exp1 = @exp1.run(symtable)
 	  return !exp1
@@ -198,6 +178,10 @@ class ASTNeg < ASTUnario
 end
 
 class ASTLess < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  term2 = @term2.run(symtable)
@@ -206,6 +190,10 @@ class ASTLess < ASTBool
 end
   
 class ASTLeq < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  term2 = @term2.run(symtable)
@@ -214,6 +202,10 @@ class ASTLeq < ASTBool
 end
 
 class ASTGreat < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  term2 = @term2.run(symtable)
@@ -222,6 +214,10 @@ class ASTGreat < ASTBool
 end
   
 class ASTGeq < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  term2 = @term2.run(symtable)
@@ -230,6 +226,10 @@ class ASTGeq < ASTBool
 end
   
 class ASTEqual < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  term2 = @term2.run(symtable)
@@ -238,6 +238,10 @@ class ASTEqual < ASTBool
 end
  
 class ASTDif < ASTBool
+  def check(symtable)
+    @exp1.check(symtable)  
+    @exp2.check(symtable)
+  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  term2 = @term2.run(symtable)
@@ -296,7 +300,7 @@ class ASTNum < ASTUnario
   end
   # si es un numero no hay ningun problema
   def check(symtable)
-    return true
+    
   end
   def run(symtable)
    return @term1.value 
@@ -318,17 +322,22 @@ class ASTId < ASTUnario
   end
 
   def check(symtable)
-    # se chequea que haya sido declarada
     elem = $tablaGlobal.find(@term1.value)
     elem2 = symtable.find(@term1.value)
+	# se chequea que haya sido declarada
+	if elem.nil?
+	  raise VarNoDec, "No esta declarada la variable #{@term1.value}, en la linea #{@term1.line}, columna #{@term1.col}.\n"
+	end
 	  # se debe chequear que no se use un arreglo como una variable
-	  if elem.class.to_s == "SymVar" ||  elem2.class.to_s == "SymVar"
-	    return true
-	  else 
-	    return false
+	  if elem.class.to_s != "SymVar" ||  elem2.class.to_s != "SymVar"
+	    raise ErrdeTipo, "Utilizacion del arreglo '#{@term1.value}' como una variable simple, en la linea #{@term1.line}, columna #{@term1.col}.\n"
 	  end
   end
 
+  def run(symtable)
+   term1 = $tablaGlobal.find(@term1.value)
+   return term1.value
+  end
 end
 
 class ASTArray < ASTBinario
@@ -342,13 +351,14 @@ class ASTArray < ASTBinario
     return @term2.value
   end
   def check(symtable)
-    # se chequea que haya sido declarada
     elem = $tablaGlobal.find(@term1.value)
+	# se chequea que haya sido declarada
+	if elem.nil?
+	  raise VarNoDec, "No esta declarada la variable #{@term1.value}, en la linea #{@term1.line}, columna #{@term1.col}.\n"
+	end
 	# se debe chequear que no se use una variable como un arreglo
-	if elem.class.to_s == "SymArray"
-	  return true
-	else 
-	  return false
+	if elem.class.to_s != "SymArray"
+	  raise ErrdeTipo, "Utilizacion de la variable simple '#{@term1.value}' como un arreglo, en la linea #{@term1.line}, columna #{@term1.col}.\n"
 	end
   end
 end

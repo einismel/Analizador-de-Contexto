@@ -486,7 +486,7 @@ module_eval <<'.,.,', 'Parser.y', 40
                                     puts "\nLa tabla de simbolos es: \n"
                                     $tablaGlobal.key.each do |x| 
                                       y = $tablaGlobal.find(x)
-                                      puts "El valor es #{x}, el simbolo es #{y}"
+                                      puts "El valor es #{x}, el simbolo es #{y.value}"
                                       if y.class.to_s == "SymProc"
                                         puts "\nLa tabla de simbolos locales del procedimiento es:.... \n"
                                         y.symtables[0].key.each do |x2|
@@ -905,7 +905,7 @@ module_eval <<'.,.,', 'Parser.y', 175
 
 module_eval <<'.,.,', 'Parser.y', 179
   def _reduce_58( val, _values, result )
- result = ASTSuma.new(val[0], val[2]);      puts "El resultado es #{result.run($tablaGlobal)}"
+ result = ASTSuma.new(val[0], val[2]);    result.check($tablaGlobal)
    result
   end
 .,.,
