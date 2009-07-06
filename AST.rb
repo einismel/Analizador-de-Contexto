@@ -329,8 +329,8 @@ class ASTId < ASTUnario
 	  raise VarNoDec, "No esta declarada la variable #{@term1.value}, en la linea #{@term1.line}, columna #{@term1.col}.\n"
 	end
 	  # se debe chequear que no se use un arreglo como una variable
-	  if elem.class.to_s != "SymVar" ||  elem2.class.to_s != "SymVar"
-	    raise ErrdeTipo, "Utilizacion del arreglo '#{@term1.value}' como una variable simple, en la linea #{@term1.line}, columna #{@term1.col}.\n"
+	  if elem.class.to_s == "SymArray" ||  elem.class.to_s == "SymProc"
+	    raise ErrdeTipo, "Utilizacion del arreglo o procedimiento '#{@term1.value}' como una variable simple, en la linea #{@term1.line}, columna #{@term1.col}.\n"
 	  end
   end
 
@@ -357,8 +357,8 @@ class ASTArray < ASTBinario
 	  raise VarNoDec, "No esta declarada la variable #{@term1.value}, en la linea #{@term1.line}, columna #{@term1.col}.\n"
 	end
 	# se debe chequear que no se use una variable como un arreglo
-	if elem.class.to_s != "SymArray"
-	  raise ErrdeTipo, "Utilizacion de la variable simple '#{@term1.value}' como un arreglo, en la linea #{@term1.line}, columna #{@term1.col}.\n"
+	if elem.class.to_s == "SymVar" ||  elem.class.to_s == "SymProc"
+	  raise ErrdeTipo, "Utilizacion de la variable simple o procedimiento '#{@term1.value}' como un arreglo, en la linea #{@term1.line}, columna #{@term1.col}.\n"
 	end
   end
 end
