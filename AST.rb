@@ -145,109 +145,117 @@ end
 
 class ASTConj < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
-    exp1 = @exp1.run(symtable)
-	exp2 = @exp2.run(symtable)
-	return exp1 && exp2
+    term1 = @term1.run(symtable)
+	term2 = @term2.run(symtable)
+	return term1 && term2
   end
 end
 
 class ASTDis < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
-    exp1 = @exp1.run(symtable)
-	exp2 = @exp2.run(symtable)
-	return exp1 || exp2
+    term1 = @term1.run(symtable)
+	term2 = @term2.run(symtable)
+	return term1 || term2
   end
 end
   
 class ASTNeg < ASTUnario
   def check(symtable)
-    @exp1.check(symtable)  
+    @term1.check(symtable)  
   end
   def run(symtable)
-    exp1 = @exp1.run(symtable)
-	  return !exp1
+    term1 = @term1.run(symtable)
+	  return !term1
   end
 end
 
 class ASTLess < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)
-	  term2 = @term2.run(symtable)
+	term2 = @term2.run(symtable)
 	  return term1 < term2
   end
 end
   
 class ASTLeq < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)
-	  term2 = @term2.run(symtable)
+	term2 = @term2.run(symtable)
 	  return term1 <= term2
   end
 end
 
 class ASTGreat < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)
-	  term2 = @term2.run(symtable)
+	term2 = @term2.run(symtable)
 	  return term1 > term2
   end
 end
   
 class ASTGeq < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)
-	  term2 = @term2.run(symtable)
+	term2 = @term2.run(symtable)
 	  return term1 >= term2
   end
 end
   
 class ASTEqual < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)
-	  term2 = @term2.run(symtable)
+	term2 = @term2.run(symtable)
 	  return term1 == term2
   end
 end
  
 class ASTDif < ASTBool
   def check(symtable)
-    @exp1.check(symtable)  
-    @exp2.check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
   end
   def run(symtable)
     term1 = @term1.run(symtable)
-	  term2 = @term2.run(symtable)
+	term2 = @term2.run(symtable)
 	  return term1 != term2
   end
 end 
+
+class ASTExpBool < ASTUnario
+  def check(tabla)
+  end
+  def run(tabla)
+    return @term1.value
+  end
+end
 
 # Nuevos Arboles
 
@@ -300,7 +308,6 @@ class ASTNum < ASTUnario
   end
   # si es un numero no hay ningun problema
   def check(symtable)
-    
   end
   def run(symtable)
    return @term1.value 

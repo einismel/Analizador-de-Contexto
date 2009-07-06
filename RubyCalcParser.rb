@@ -982,7 +982,7 @@ module_eval <<'.,.,', 'Parser.y', 189
 
 module_eval <<'.,.,', 'Parser.y', 192
   def _reduce_69( val, _values, result )
- result = ASTConj.new(val[0], val[2]); puts "guardia -> guardia && booleano"
+ result = ASTConj.new(val[0], val[2]); result.check($tablaGlobal); puts "guardia -> guardia && booleano"
    result
   end
 .,.,
@@ -1052,14 +1052,14 @@ module_eval <<'.,.,', 'Parser.y', 203
 
 module_eval <<'.,.,', 'Parser.y', 204
   def _reduce_79( val, _values, result )
- puts "guardia -> true"
+ result = ASTExpBool.new(val[0]); puts "guardia -> true"
    result
   end
 .,.,
 
 module_eval <<'.,.,', 'Parser.y', 205
   def _reduce_80( val, _values, result )
- puts "guardia -> false"
+ result = ASTExpBool.new(val[0]); puts "guardia -> false"
    result
   end
 .,.,
