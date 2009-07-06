@@ -21,6 +21,9 @@ class ASTUnario < AST
 	def initialize(exp)
 		@term1 = exp
 	end
+  def check(symtable, symtableG)
+    @term1.check(symtable)  
+  end
 end 
 
 class ASTBinario < AST
@@ -29,6 +32,10 @@ class ASTBinario < AST
 		@term1 = term1
 		@term2 = term2
 	end
+  def check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
+  end
 end
 
 class ASTTernario < AST
@@ -38,6 +45,11 @@ class ASTTernario < AST
 		@term2 = term2
 		@term3 = term3
 	end
+  def check(symtable)
+    @term1.check(symtable)  
+    @term2.check(symtable)
+	@term3.check(symtable)
+  end
 end
 
 class ASTMultiple < AST
@@ -64,15 +76,9 @@ class ASTDec < ASTBinario
 end
 
 class ASTMath < ASTBinario
-  def check(symtable)
-  end
 end
 
 class ASTSuma < ASTMath
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable) 
     term2 = @term2.run(symtable) 	
@@ -81,10 +87,6 @@ class ASTSuma < ASTMath
 end
 
 class ASTResta < ASTMath
-  def check(symtble)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable) 
     term1 = @term1.run(symtable)  
     term2 = @term2.run(symtable)  
@@ -93,10 +95,6 @@ class ASTResta < ASTMath
 end
 
 class ASTMult < ASTMath
-  def check(symtble)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable) 
     term1 = @term1.run(symtable)  
     term2 = @term2.run(symtable)  
@@ -105,10 +103,6 @@ class ASTMult < ASTMath
 end
 
 class ASTDiv < ASTMath
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)  
     term2 = @term2.run(symtable)  
@@ -117,9 +111,6 @@ class ASTDiv < ASTMath
 end
 
 class ASTResUnario < ASTUnario
-  def check(symtable, symtableG)
-    @term1.check(symtable)  
-  end
   def run(symtable) 
     term1 = @term1.run(symtable)  
     return term1*-1 
@@ -127,10 +118,6 @@ class ASTResUnario < ASTUnario
 end
 
 class ASTRes < ASTMath
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable) 
     term1 = @term1.run(symtable)  
     term2 = @term2.run(symtable)  
@@ -139,15 +126,9 @@ class ASTRes < ASTMath
 end
 
 class ASTBool < ASTBinario
-  def check(symtable)
-  end
 end
 
 class ASTConj < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -156,10 +137,6 @@ class ASTConj < ASTBool
 end
 
 class ASTDis < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -168,9 +145,6 @@ class ASTDis < ASTBool
 end
   
 class ASTNeg < ASTUnario
-  def check(symtable)
-    @term1.check(symtable)  
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	  return !term1
@@ -178,10 +152,6 @@ class ASTNeg < ASTUnario
 end
 
 class ASTLess < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -190,10 +160,6 @@ class ASTLess < ASTBool
 end
   
 class ASTLeq < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -202,10 +168,6 @@ class ASTLeq < ASTBool
 end
 
 class ASTGreat < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -214,10 +176,6 @@ class ASTGreat < ASTBool
 end
   
 class ASTGeq < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -226,10 +184,6 @@ class ASTGeq < ASTBool
 end
   
 class ASTEqual < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -238,10 +192,6 @@ class ASTEqual < ASTBool
 end
  
 class ASTDif < ASTBool
-  def check(symtable)
-    @term1.check(symtable)  
-    @term2.check(symtable)
-  end
   def run(symtable)
     term1 = @term1.run(symtable)
 	term2 = @term2.run(symtable)
@@ -380,4 +330,4 @@ class ASTAsig < ASTBinario
     variable.setValue(@term1.getPosicion(), @term2.run('e')) 
     $tablaGlobal.replace(@term1.getId(), variable) 
   end 
-end 
+end

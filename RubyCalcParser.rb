@@ -905,7 +905,7 @@ module_eval <<'.,.,', 'Parser.y', 175
 
 module_eval <<'.,.,', 'Parser.y', 179
   def _reduce_58( val, _values, result )
- result = ASTSuma.new(val[0], val[2]);    result.check($tablaGlobal)
+ result = ASTSuma.new(val[0], val[2]);    result.check($tablaGlobal); puts "exp -> exp + exp\n"
    result
   end
 .,.,
